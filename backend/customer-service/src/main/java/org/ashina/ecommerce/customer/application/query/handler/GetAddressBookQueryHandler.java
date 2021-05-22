@@ -6,7 +6,7 @@ import org.ashina.ecommerce.customer.application.query.model.GetAddressBookQuery
 import org.ashina.ecommerce.customer.application.query.model.GetAddressBookView;
 import org.ashina.ecommerce.customer.domain.AddressBook;
 import org.ashina.ecommerce.customer.infrastructure.persistence.AddressBookPersistence;
-import org.ashina.ecommerce.sharedkernel.domain.DomainException;
+import org.ashina.ecommerce.sharedkernel.exception.DomainException;
 import org.ashina.ecommerce.sharedkernel.query.handler.QueryHandler;
 import org.ashina.ecommerce.sharedkernel.query.model.Query;
 

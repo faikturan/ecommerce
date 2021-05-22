@@ -4,12 +4,12 @@ import lombok.RequiredArgsConstructor;
 import org.ashina.ecommerce.customer.application.command.model.CreateCustomerCommand;
 import org.ashina.ecommerce.customer.application.error.ErrorCode;
 import org.ashina.ecommerce.customer.domain.Customer;
-import org.ashina.ecommerce.customer.infrastructure.identity.IdentityService;
+import org.ashina.ecommerce.customer.infrastructure.uaa.UaaService;
 import org.ashina.ecommerce.customer.infrastructure.persistence.CustomerPersistence;
 import org.ashina.ecommerce.sharedkernel.command.handler.CommandHandler;
 import org.ashina.ecommerce.sharedkernel.command.model.Command;
 import org.ashina.ecommerce.sharedkernel.domain.DomainEntityIdentifierGenerator;
-import org.ashina.ecommerce.sharedkernel.domain.DomainException;
+import org.ashina.ecommerce.sharedkernel.exception.DomainException;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
@@ -18,7 +18,7 @@ import java.util.Optional;
 public class CreateCustomerCommandHandler implements CommandHandler<CreateCustomerCommand> {
 
     private final CustomerPersistence customerPersistence;
-    private final IdentityService identityService;
+    private final UaaService uaaService;
 
     @Override
     public Class<? extends Command> support() {
@@ -40,8 +40,8 @@ public class CreateCustomerCommandHandler implements CommandHandler<CreateCustom
         Customer customer = newCustomer(command);
         customerPersistence.save(customer);
 
-        // Create identity
-        identityService.save(customer, command.getPassword());
+        // Create account
+        uaaService.createAccount(customer, command.getPassword());
     }
 
     private Customer newCustomer(CreateCustomerCommand command) {

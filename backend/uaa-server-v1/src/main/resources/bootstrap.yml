@@ -1,0 +1,7 @@
+spring:
+  application:
+    name: uaa-server
+  profiles:
+    active: local
+  config:
+    uri: http://localhost:8888

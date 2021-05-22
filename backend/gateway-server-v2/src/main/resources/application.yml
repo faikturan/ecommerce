@@ -1,0 +1,51 @@
+server:
+  port: 8080
+
+logging:
+  level:
+#    org.springframework.cloud.gateway: TRACE
+    org.springframework.security: TRACE
+
+spring:
+  thymeleaf:
+    cache: false
+  security:
+    oauth2:
+      client:
+        provider:
+          spring-uaa:
+            issuer-uri: http://127.0.0.1:8901
+            user-name-attribute: sub
+        registration:
+          gateway:
+            provider: spring-uaa
+            client-id: gateway
+            client-secret: 0VEX1mRAfg
+            authorization-grant-type: authorization_code
+            redirect-uri: "{baseUrl}/login/oauth2/code/{registrationId}"
+            scope: openid,trust
+  cloud:
+    gateway:
+      discovery:
+        locator:
+          enabled: true
+#          lowerCaseServiceId: true
+#      routes:
+#        - id: catalog-service
+#          uri: lb://CATALOG-SERVICE
+#          predicates:
+#            - Path=/catalog-service/**
+#          filters:
+#            - AuthorizationFilter
+#        - id: customer-service
+#          uri: lb://CUSTOMER-SERVICE
+#          predicates:
+#            - Path=/customer-service/**
+#        - id: inventory-service
+#          uri: lb://INVENTORY-SERVICE
+#          predicates:
+#            - Path=/inventory-service/**
+#        - id: order-service
+#          uri: lb://ORDER-SERVICE
+#          predicates:
+#            - Path=/order-service/**

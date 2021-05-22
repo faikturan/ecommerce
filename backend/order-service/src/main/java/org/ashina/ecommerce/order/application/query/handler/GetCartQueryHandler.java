@@ -8,7 +8,7 @@ import org.ashina.ecommerce.order.domain.CartLine;
 import org.ashina.ecommerce.order.infrastructure.ecommerce.CatalogService;
 import org.ashina.ecommerce.order.infrastructure.ecommerce.model.Product;
 import org.ashina.ecommerce.order.infrastructure.persistence.CartLinePersistence;
-import org.ashina.ecommerce.sharedkernel.domain.DomainException;
+import org.ashina.ecommerce.sharedkernel.exception.DomainException;
 import org.ashina.ecommerce.sharedkernel.query.handler.QueryHandler;
 import org.ashina.ecommerce.sharedkernel.query.model.Query;
 import org.springframework.util.CollectionUtils;

@@ -10,5 +10,4 @@ public class DomainEntityIdentifierGenerator {
     public static String uuid() {
         return UUID.randomUUID().toString();
     }
-
 }

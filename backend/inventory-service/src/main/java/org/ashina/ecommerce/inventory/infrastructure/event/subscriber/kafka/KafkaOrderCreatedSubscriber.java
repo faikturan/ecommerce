@@ -4,7 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.ashina.ecommerce.inventory.application.event.handler.OrderCreatedHandler;
 import org.ashina.ecommerce.inventory.infrastructure.event.subscriber.OrderCreatedSubscriber;
-import org.ashina.ecommerce.sharedkernel.domain.DomainException;
+import org.ashina.ecommerce.sharedkernel.exception.DomainException;
 import org.ashina.ecommerce.sharedkernel.event.model.order.OrderCreated;
 import org.springframework.cloud.stream.annotation.StreamListener;
 import org.springframework.kafka.support.KafkaHeaders;

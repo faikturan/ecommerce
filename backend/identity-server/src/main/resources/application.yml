@@ -1,7 +1,0 @@
-server:
-  port: 8901
-
-logging:
-  level:
-    org.springframework.data.mongodb.core.MongoTemplate: DEBUG
-    org.ashina.ecommerce: DEBUG

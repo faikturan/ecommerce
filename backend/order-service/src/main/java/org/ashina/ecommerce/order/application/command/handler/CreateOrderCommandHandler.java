@@ -16,7 +16,7 @@ import org.ashina.ecommerce.order.infrastructure.persistence.OrderPersistence;
 import org.ashina.ecommerce.sharedkernel.command.handler.CommandHandler;
 import org.ashina.ecommerce.sharedkernel.command.model.Command;
 import org.ashina.ecommerce.sharedkernel.domain.DomainEntityIdentifierGenerator;
-import org.ashina.ecommerce.sharedkernel.domain.DomainException;
+import org.ashina.ecommerce.sharedkernel.exception.DomainException;
 import org.ashina.ecommerce.sharedkernel.event.model.order.OrderCreated;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;

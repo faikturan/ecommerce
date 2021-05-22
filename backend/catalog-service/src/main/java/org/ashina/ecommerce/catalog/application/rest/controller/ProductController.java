@@ -1,6 +1,7 @@
 package org.ashina.ecommerce.catalog.application.rest.controller;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.ashina.ecommerce.catalog.application.command.model.CreateProductCommand;
 import org.ashina.ecommerce.catalog.application.query.model.GetProductsQuery;
 import org.ashina.ecommerce.catalog.application.query.model.GetProductsView;
@@ -11,6 +12,8 @@ import org.ashina.ecommerce.sharedkernel.command.gateway.CommandGateway;
 import org.ashina.ecommerce.sharedkernel.query.gateway.QueryGateway;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -22,6 +25,7 @@ import java.util.Collection;
 
 @RestController
 @RequiredArgsConstructor
+@Slf4j
 public class ProductController {
 
     private final CommandGateway commandGateway;
@@ -43,7 +47,13 @@ public class ProductController {
     @GetMapping("/api/v1/products/search")
     public ResponseEntity<SearchProductView> searchProduct(@RequestParam String keyword,
                                                            @RequestParam(required = false, defaultValue = "0") int page,
-                                                           @RequestParam(required = false, defaultValue = "20") int size) throws Exception {
+                                                           @RequestParam(required = false, defaultValue = "20") int size,
+                                                           @AuthenticationPrincipal Jwt jwt)
+            throws Exception {
+        log.debug("***** JWT Headers: {}", jwt.getHeaders());
+        log.debug("***** JWT Claims: {}", jwt.getClaims().toString());
+        log.debug("***** JWT Token: {}", jwt.getTokenValue());
+
         SearchProductQuery query = newSearchProductQuery(keyword, page, size);
         SearchProductView view = (SearchProductView) queryGateway.execute(query);
         return new ResponseEntity<>(view, HttpStatus.OK);

@@ -3,7 +3,7 @@ package org.ashina.ecommerce.inventory.application.event.handler;
 import lombok.RequiredArgsConstructor;
 import org.ashina.ecommerce.inventory.domain.Stock;
 import org.ashina.ecommerce.inventory.infrastructure.persistence.StockPersistence;
-import org.ashina.ecommerce.sharedkernel.domain.DomainException;
+import org.ashina.ecommerce.sharedkernel.exception.DomainException;
 import org.ashina.ecommerce.sharedkernel.event.handler.DomainEventHandler;
 import org.ashina.ecommerce.sharedkernel.event.model.order.OrderCreated;
 

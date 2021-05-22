@@ -9,7 +9,7 @@ import org.ashina.ecommerce.order.infrastructure.event.publisher.OrderCanceledPu
 import org.ashina.ecommerce.order.infrastructure.persistence.OrderPersistence;
 import org.ashina.ecommerce.sharedkernel.command.handler.CommandHandler;
 import org.ashina.ecommerce.sharedkernel.command.model.Command;
-import org.ashina.ecommerce.sharedkernel.domain.DomainException;
+import org.ashina.ecommerce.sharedkernel.exception.DomainException;
 import org.ashina.ecommerce.sharedkernel.event.model.order.OrderCanceled;
 import org.springframework.transaction.annotation.Transactional;
 

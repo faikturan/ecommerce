@@ -7,7 +7,7 @@ import org.ashina.ecommerce.inventory.domain.Supplier;
 import org.ashina.ecommerce.inventory.infrastructure.persistence.SupplierPersistence;
 import org.ashina.ecommerce.sharedkernel.command.handler.CommandHandler;
 import org.ashina.ecommerce.sharedkernel.command.model.Command;
-import org.ashina.ecommerce.sharedkernel.domain.DomainException;
+import org.ashina.ecommerce.sharedkernel.exception.DomainException;
 import org.springframework.transaction.annotation.Transactional;
 
 @RequiredArgsConstructor
