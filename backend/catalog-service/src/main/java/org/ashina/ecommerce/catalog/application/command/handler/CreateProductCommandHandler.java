@@ -8,7 +8,6 @@ import org.ashina.ecommerce.catalog.infrastructure.search.ProductSearch;
 import org.ashina.ecommerce.sharedkernel.command.handler.CommandHandler;
 import org.ashina.ecommerce.sharedkernel.command.model.Command;
 import org.ashina.ecommerce.sharedkernel.domain.DomainEntityIdentifierGenerator;
-import org.ashina.ecommerce.sharedkernel.exception.DomainException;
 import org.springframework.transaction.annotation.Transactional;
 
 @RequiredArgsConstructor
@@ -24,7 +23,7 @@ public class CreateProductCommandHandler implements CommandHandler<CreateProduct
 
     @Override
     @Transactional
-    public void handle(CreateProductCommand command) throws DomainException {
+    public void handle(CreateProductCommand command) {
         // Create product
         Product product = newProduct(command);
 

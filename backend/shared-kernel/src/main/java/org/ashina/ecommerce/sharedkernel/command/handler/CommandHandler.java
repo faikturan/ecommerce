@@ -6,5 +6,5 @@ public interface CommandHandler<C extends Command> {
 
     Class<? extends Command> support();
 
-    void handle(C command) throws Exception;
+    void handle(C command);
 }

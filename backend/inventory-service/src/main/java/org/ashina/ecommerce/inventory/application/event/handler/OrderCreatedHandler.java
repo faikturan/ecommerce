@@ -3,7 +3,6 @@ package org.ashina.ecommerce.inventory.application.event.handler;
 import lombok.RequiredArgsConstructor;
 import org.ashina.ecommerce.inventory.domain.Stock;
 import org.ashina.ecommerce.inventory.infrastructure.persistence.StockPersistence;
-import org.ashina.ecommerce.sharedkernel.exception.DomainException;
 import org.ashina.ecommerce.sharedkernel.event.handler.DomainEventHandler;
 import org.ashina.ecommerce.sharedkernel.event.model.order.OrderCreated;
 
@@ -18,7 +17,7 @@ public class OrderCreatedHandler implements DomainEventHandler<OrderCreated> {
     private final StockPersistence stockPersistence;
 
     @Override
-    public void handle(OrderCreated event) throws DomainException {
+    public void handle(OrderCreated event) {
         Map<String, Integer> lineMap = event.getLines()
                 .stream()
                 .collect(Collectors.toMap(OrderCreated.Line::getProductId, OrderCreated.Line::getQuantity));

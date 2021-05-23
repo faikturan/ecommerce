@@ -7,7 +7,6 @@ import org.ashina.ecommerce.inventory.infrastructure.persistence.SupplierPersist
 import org.ashina.ecommerce.sharedkernel.command.handler.CommandHandler;
 import org.ashina.ecommerce.sharedkernel.command.model.Command;
 import org.ashina.ecommerce.sharedkernel.domain.DomainEntityIdentifierGenerator;
-import org.ashina.ecommerce.sharedkernel.exception.DomainException;
 import org.springframework.transaction.annotation.Transactional;
 
 @RequiredArgsConstructor
@@ -22,7 +21,7 @@ public class CreateSupplierCommandHandler implements CommandHandler<CreateSuppli
 
     @Override
     @Transactional
-    public void handle(CreateSupplierCommand command) throws DomainException {
+    public void handle(CreateSupplierCommand command) {
         // Create supplier
         Supplier supplier = newSupplier(command);
         supplierPersistence.save(supplier);

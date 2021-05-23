@@ -18,7 +18,7 @@ public abstract class CommandGateway {
         this.validator = validator;
     }
 
-    public void send(Command command) throws Exception {
+    public void send(Command command) {
         if (command.isHasValidate()) {
             validate(command);
         }

@@ -1,0 +1,44 @@
+server:
+  port: 8080
+
+logging:
+  level:
+    org.springframework.cloud.gateway: DEBUG
+    org.springframework.security: DEBUG
+    org.springframework.web.reactive.function.client: TRACE
+
+spring:
+  cloud:
+    gateway:
+      discovery:
+        locator:
+          enabled: true
+          lowerCaseServiceId: true
+      default-filters:
+        - TokenRelay
+        - RemoveRequestHeader=Cookie
+      routes:
+        - id: catalog-service
+          uri: lb://CATALOG-SERVICE
+          predicates:
+            - Path=/api/catalog-service/**
+          filters:
+            - RewritePath=/api/catalog-service/(?<segment>.*), /api/$\{segment}
+        - id: customer-service
+          uri: lb://CUSTOMER-SERVICE
+          predicates:
+            - Path=/api/customer-service/**
+          filters:
+            - RewritePath=/api/customer-service/(?<segment>.*), /api/$\{segment}
+        - id: inventory-service
+          uri: lb://INVENTORY-SERVICE
+          predicates:
+            - Path=/api/inventory-service/**
+          filters:
+            - RewritePath=/api/inventory-service/(?<segment>.*), /api/$\{segment}
+        - id: order-service
+          uri: lb://ORDER-SERVICE
+          predicates:
+            - Path=/api/order-service/**
+          filters:
+            - RewritePath=/api/order-service/(?<segment>.*), /api/$\{segment}

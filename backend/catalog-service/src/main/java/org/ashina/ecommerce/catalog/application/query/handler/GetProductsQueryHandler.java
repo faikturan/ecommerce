@@ -21,7 +21,7 @@ public class GetProductsQueryHandler implements QueryHandler<GetProductsQuery, G
     }
 
     @Override
-    public GetProductsView handle(GetProductsQuery query) throws Exception {
+    public GetProductsView handle(GetProductsQuery query) {
         List<Product> products = productPersistence.findByIdIn(query.getIds());
         return new GetProductsView(products);
     }

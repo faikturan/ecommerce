@@ -3,14 +3,15 @@ package org.ashina.ecommerce.order.application.command.handler;
 import lombok.RequiredArgsConstructor;
 import org.ashina.ecommerce.order.application.command.CancelOrderCommand;
 import org.ashina.ecommerce.order.application.error.ErrorCode;
+import org.ashina.ecommerce.order.application.error.ServiceException;
 import org.ashina.ecommerce.order.domain.Order;
 import org.ashina.ecommerce.order.domain.OrderStatus;
 import org.ashina.ecommerce.order.infrastructure.event.publisher.OrderCanceledPublisher;
 import org.ashina.ecommerce.order.infrastructure.persistence.OrderPersistence;
 import org.ashina.ecommerce.sharedkernel.command.handler.CommandHandler;
 import org.ashina.ecommerce.sharedkernel.command.model.Command;
-import org.ashina.ecommerce.sharedkernel.exception.DomainException;
 import org.ashina.ecommerce.sharedkernel.event.model.order.OrderCanceled;
+import org.springframework.http.HttpStatus;
 import org.springframework.transaction.annotation.Transactional;
 
 @RequiredArgsConstructor
@@ -26,19 +27,21 @@ public class CancelOrderCommandHandler implements CommandHandler<CancelOrderComm
 
     @Override
     @Transactional
-    public void handle(CancelOrderCommand command) throws DomainException {
+    public void handle(CancelOrderCommand command) {
         // Get order
         Order order = orderPersistence.findById(command.getOrderId())
-                .orElseThrow(() -> new DomainException(
+                .orElseThrow(() -> ServiceException.of(
                         ErrorCode.ORDER_NOT_FOUND,
-                        String.format("Order %s not found", command.getOrderId())
+                        String.format("Order %s not found", command.getOrderId()),
+                        HttpStatus.NOT_FOUND
                 ));
 
         // Validate permission
         if (!command.getCustomerId().equals(order.getCustomerId())) {
-            throw new DomainException(
+            throw ServiceException.of(
                     ErrorCode.PERMISSION,
-                    "You do not have permission to cancel order"
+                    "You do not have permission to cancel order",
+                    HttpStatus.FORBIDDEN
             );
         }
 

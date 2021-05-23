@@ -19,7 +19,7 @@ public class StockController {
     private final QueryGateway queryGateway;
 
     @GetMapping("/api/v1/stocks")
-    public ResponseEntity<GetStocksView> getStocks(@RequestParam List<String> productIds) throws Exception {
+    public ResponseEntity<GetStocksView> getStocks(@RequestParam List<String> productIds) {
         GetStocksQuery query = newGetStocksQuery(productIds);
         GetStocksView view = (GetStocksView) queryGateway.execute(query);
         return new ResponseEntity<>(view, HttpStatus.OK);

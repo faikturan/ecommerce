@@ -3,13 +3,14 @@ package org.ashina.ecommerce.customer.application.command.handler;
 import lombok.RequiredArgsConstructor;
 import org.ashina.ecommerce.customer.application.command.model.CreateCustomerCommand;
 import org.ashina.ecommerce.customer.application.error.ErrorCode;
+import org.ashina.ecommerce.customer.application.error.ServiceException;
 import org.ashina.ecommerce.customer.domain.Customer;
-import org.ashina.ecommerce.customer.infrastructure.uaa.UaaService;
 import org.ashina.ecommerce.customer.infrastructure.persistence.CustomerPersistence;
+import org.ashina.ecommerce.customer.infrastructure.uaa.UaaService;
 import org.ashina.ecommerce.sharedkernel.command.handler.CommandHandler;
 import org.ashina.ecommerce.sharedkernel.command.model.Command;
 import org.ashina.ecommerce.sharedkernel.domain.DomainEntityIdentifierGenerator;
-import org.ashina.ecommerce.sharedkernel.exception.DomainException;
+import org.springframework.http.HttpStatus;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
@@ -27,13 +28,15 @@ public class CreateCustomerCommandHandler implements CommandHandler<CreateCustom
 
     @Override
     @Transactional
-    public void handle(CreateCustomerCommand command) throws DomainException {
+    public void handle(CreateCustomerCommand command) {
         // Validate email not registered
         Optional<Customer> customerOpt = customerPersistence.findByEmail(command.getEmail());
         if (customerOpt.isPresent()) {
-            throw DomainException.of(
+            throw ServiceException.of(
                     ErrorCode.EMAIL_REGISTERED,
-                    String.format("Email %s already registered", command.getEmail()));
+                    String.format("Email %s already registered", command.getEmail()),
+                    HttpStatus.CONFLICT
+            );
         }
 
         // Create customer

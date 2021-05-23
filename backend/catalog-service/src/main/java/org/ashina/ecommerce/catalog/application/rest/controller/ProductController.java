@@ -12,8 +12,6 @@ import org.ashina.ecommerce.sharedkernel.command.gateway.CommandGateway;
 import org.ashina.ecommerce.sharedkernel.query.gateway.QueryGateway;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -32,7 +30,7 @@ public class ProductController {
     private final QueryGateway queryGateway;
 
     @GetMapping("/api/v1/products")
-    public ResponseEntity<GetProductsView> getProducts(@RequestParam Collection<String> ids) throws Exception {
+    public ResponseEntity<GetProductsView> getProducts(@RequestParam Collection<String> ids) {
         GetProductsQuery query = newGetProductsQuery(ids);
         GetProductsView view = (GetProductsView) queryGateway.execute(query);
         return new ResponseEntity<>(view, HttpStatus.OK);
@@ -47,13 +45,7 @@ public class ProductController {
     @GetMapping("/api/v1/products/search")
     public ResponseEntity<SearchProductView> searchProduct(@RequestParam String keyword,
                                                            @RequestParam(required = false, defaultValue = "0") int page,
-                                                           @RequestParam(required = false, defaultValue = "20") int size,
-                                                           @AuthenticationPrincipal Jwt jwt)
-            throws Exception {
-        log.debug("***** JWT Headers: {}", jwt.getHeaders());
-        log.debug("***** JWT Claims: {}", jwt.getClaims().toString());
-        log.debug("***** JWT Token: {}", jwt.getTokenValue());
-
+                                                           @RequestParam(required = false, defaultValue = "20") int size) {
         SearchProductQuery query = newSearchProductQuery(keyword, page, size);
         SearchProductView view = (SearchProductView) queryGateway.execute(query);
         return new ResponseEntity<>(view, HttpStatus.OK);
@@ -69,7 +61,7 @@ public class ProductController {
     }
 
     @PostMapping("/api/v1/products")
-    public ResponseEntity<Void> createProduct(@Valid @RequestBody CreateProductDto dto) throws Exception {
+    public ResponseEntity<Void> createProduct(@Valid @RequestBody CreateProductDto dto) {
         CreateProductCommand command = newCreateProductCommand(dto);
         commandGateway.send(command);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);

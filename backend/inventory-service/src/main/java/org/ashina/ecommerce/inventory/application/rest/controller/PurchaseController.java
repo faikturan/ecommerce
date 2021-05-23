@@ -19,7 +19,7 @@ public class PurchaseController {
     private final CommandGateway commandGateway;
 
     @PostMapping("/api/v1/purchases")
-    public ResponseEntity<Void> createProduct(@Valid @RequestBody CreatePurchaseDto dto) throws Exception {
+    public ResponseEntity<Void> createProduct(@Valid @RequestBody CreatePurchaseDto dto) {
         CreatePurchaseCommand command = newCreatePurchaseCommand(dto);
         commandGateway.send(command);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);

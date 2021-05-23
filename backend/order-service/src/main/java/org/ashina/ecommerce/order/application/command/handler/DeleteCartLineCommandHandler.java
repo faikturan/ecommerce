@@ -6,7 +6,6 @@ import org.ashina.ecommerce.order.application.command.UpdateCartLineCommand;
 import org.ashina.ecommerce.order.infrastructure.persistence.CartLinePersistence;
 import org.ashina.ecommerce.sharedkernel.command.handler.CommandHandler;
 import org.ashina.ecommerce.sharedkernel.command.model.Command;
-import org.ashina.ecommerce.sharedkernel.exception.DomainException;
 import org.springframework.transaction.annotation.Transactional;
 
 @RequiredArgsConstructor
@@ -21,7 +20,7 @@ public class DeleteCartLineCommandHandler implements CommandHandler<DeleteCartLi
 
     @Override
     @Transactional
-    public void handle(DeleteCartLineCommand command) throws DomainException {
+    public void handle(DeleteCartLineCommand command) {
         cartLinePersistence.findByCustomerIdAndProductId(command.getCustomerId(), command.getProductId())
                 .ifPresent(cartLinePersistence::delete);
     }

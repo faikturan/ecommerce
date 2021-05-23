@@ -3,11 +3,12 @@ package org.ashina.ecommerce.customer.application.command.handler;
 import lombok.RequiredArgsConstructor;
 import org.ashina.ecommerce.customer.application.command.model.CreateAddressBookCommand;
 import org.ashina.ecommerce.customer.application.error.ErrorCode;
+import org.ashina.ecommerce.customer.application.error.ServiceException;
 import org.ashina.ecommerce.customer.domain.AddressBook;
 import org.ashina.ecommerce.customer.infrastructure.persistence.AddressBookPersistence;
 import org.ashina.ecommerce.sharedkernel.command.handler.CommandHandler;
 import org.ashina.ecommerce.sharedkernel.command.model.Command;
-import org.ashina.ecommerce.sharedkernel.exception.DomainException;
+import org.springframework.http.HttpStatus;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
@@ -24,13 +25,14 @@ public class CreateAddressBookCommandHandler implements CommandHandler<CreateAdd
 
     @Override
     @Transactional
-    public void handle(CreateAddressBookCommand command) throws DomainException {
+    public void handle(CreateAddressBookCommand command) {
         // Check address exist
         Optional<AddressBook> addressOpt = addressBookPersistence.findByCustomerId(command.getCustomerId());
         if (addressOpt.isPresent()) {
-            throw new DomainException(
+            throw new ServiceException(
                     ErrorCode.ADDRESS_EXIST,
-                    String.format("Address of customer %s already exists", command.getCustomerId())
+                    String.format("Address of customer %s already exists", command.getCustomerId()),
+                    HttpStatus.CONFLICT
             );
         }
 

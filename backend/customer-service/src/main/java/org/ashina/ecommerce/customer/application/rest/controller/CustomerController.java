@@ -19,7 +19,7 @@ public class CustomerController {
     private final CommandGateway commandGateway;
 
     @PostMapping("/api/v1/customers")
-    public ResponseEntity<Void> createCustomer(@Valid @RequestBody CreateCustomerDto dto) throws Exception {
+    public ResponseEntity<Void> createCustomer(@Valid @RequestBody CreateCustomerDto dto) {
         CreateCustomerCommand command = newCreateCustomerCommand(dto);
         commandGateway.send(command);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);

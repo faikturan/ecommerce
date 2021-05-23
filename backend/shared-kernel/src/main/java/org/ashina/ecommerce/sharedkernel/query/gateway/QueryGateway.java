@@ -19,7 +19,7 @@ public abstract class QueryGateway {
         this.validator = validator;
     }
 
-    public View execute(Query query) throws Exception {
+    public View execute(Query query) {
         if (query.isHasValidate()) {
             validate(query);
         }

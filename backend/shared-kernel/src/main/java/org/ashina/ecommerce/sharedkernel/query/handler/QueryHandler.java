@@ -7,5 +7,5 @@ public interface QueryHandler<Q extends Query, V extends View> {
 
     Class<? extends Query> support();
 
-    V handle(Q query) throws Exception;
+    V handle(Q query);
 }

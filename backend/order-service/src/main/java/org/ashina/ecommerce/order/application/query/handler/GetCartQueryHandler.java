@@ -2,15 +2,16 @@ package org.ashina.ecommerce.order.application.query.handler;
 
 import lombok.RequiredArgsConstructor;
 import org.ashina.ecommerce.order.application.error.ErrorCode;
+import org.ashina.ecommerce.order.application.error.ServiceException;
 import org.ashina.ecommerce.order.application.query.model.GetCartQuery;
 import org.ashina.ecommerce.order.application.query.model.GetCartView;
 import org.ashina.ecommerce.order.domain.CartLine;
 import org.ashina.ecommerce.order.infrastructure.ecommerce.CatalogService;
 import org.ashina.ecommerce.order.infrastructure.ecommerce.model.Product;
 import org.ashina.ecommerce.order.infrastructure.persistence.CartLinePersistence;
-import org.ashina.ecommerce.sharedkernel.exception.DomainException;
 import org.ashina.ecommerce.sharedkernel.query.handler.QueryHandler;
 import org.ashina.ecommerce.sharedkernel.query.model.Query;
+import org.springframework.http.HttpStatus;
 import org.springframework.util.CollectionUtils;
 
 import java.util.List;
@@ -29,7 +30,7 @@ public class GetCartQueryHandler implements QueryHandler<GetCartQuery, GetCartVi
     }
 
     @Override
-    public GetCartView handle(GetCartQuery query) throws DomainException {
+    public GetCartView handle(GetCartQuery query) {
         GetCartView view = new GetCartView();
 
         // Get cart lines
@@ -52,9 +53,10 @@ public class GetCartQueryHandler implements QueryHandler<GetCartQuery, GetCartVi
         for (CartLine cartLine : cartLines) {
             Product product = productMap.get(cartLine.getProductId());
             if (product == null) {
-                throw new DomainException(
+                throw ServiceException.of(
                         ErrorCode.PRODUCT_NOT_FOUND,
-                        String.format("Product %s not found", cartLine.getProductId())
+                        String.format("Product %s not found", cartLine.getProductId()),
+                        HttpStatus.NOT_FOUND
                 );
             }
             view.addLine(new GetCartView.Line(cartLine, product));

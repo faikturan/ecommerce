@@ -3,6 +3,7 @@ package org.ashina.ecommerce.order.application.command.handler;
 import lombok.RequiredArgsConstructor;
 import org.ashina.ecommerce.order.application.command.CreateOrderCommand;
 import org.ashina.ecommerce.order.application.error.ErrorCode;
+import org.ashina.ecommerce.order.application.error.ServiceException;
 import org.ashina.ecommerce.order.domain.CartLine;
 import org.ashina.ecommerce.order.domain.Order;
 import org.ashina.ecommerce.order.domain.OrderLine;
@@ -16,8 +17,8 @@ import org.ashina.ecommerce.order.infrastructure.persistence.OrderPersistence;
 import org.ashina.ecommerce.sharedkernel.command.handler.CommandHandler;
 import org.ashina.ecommerce.sharedkernel.command.model.Command;
 import org.ashina.ecommerce.sharedkernel.domain.DomainEntityIdentifierGenerator;
-import org.ashina.ecommerce.sharedkernel.exception.DomainException;
 import org.ashina.ecommerce.sharedkernel.event.model.order.OrderCreated;
+import org.springframework.http.HttpStatus;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
@@ -41,13 +42,14 @@ public class CreateOrderCommandHandler implements CommandHandler<CreateOrderComm
 
     @Override
     @Transactional
-    public void handle(CreateOrderCommand command) throws DomainException {
+    public void handle(CreateOrderCommand command) {
         // Get cart lines
         List<CartLine> cartLines = cartLinePersistence.findByCustomerId(command.getCustomerId());
         if (CollectionUtils.isEmpty(cartLines)) {
-            throw new DomainException(
+            throw ServiceException.of(
                 ErrorCode.CART_EMPTY,
-                "You does not have any products in cart"
+                "You does not have any products in cart",
+                    HttpStatus.INTERNAL_SERVER_ERROR
             );
         }
 
@@ -74,12 +76,13 @@ public class CreateOrderCommandHandler implements CommandHandler<CreateOrderComm
         orderCreatedPublisher.publish(event);
     }
 
-    private void checkOutOfStock(Map<String, Integer> stockMap) throws DomainException {
+    private void checkOutOfStock(Map<String, Integer> stockMap) {
         for (Map.Entry<String, Integer> entry : stockMap.entrySet()) {
             if (entry.getValue() == 0) {
-                throw new DomainException(
+                throw ServiceException.of(
                         ErrorCode.PRODUCT_OUT_OF_STOCK,
-                        String.format("Product %s is out of stock now", entry.getKey())
+                        String.format("Product %s is out of stock now", entry.getKey()),
+                        HttpStatus.INTERNAL_SERVER_ERROR
                 );
             }
         }

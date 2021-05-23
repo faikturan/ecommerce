@@ -21,7 +21,7 @@ public class GetStocksQueryHandler implements QueryHandler<GetStocksQuery, GetSt
     }
 
     @Override
-    public GetStocksView handle(GetStocksQuery query) throws Exception {
+    public GetStocksView handle(GetStocksQuery query) {
         List<Stock> stocks = stockPersistence.findByProductIdIn(query.getProductIds());
         return new GetStocksView(stocks);
     }

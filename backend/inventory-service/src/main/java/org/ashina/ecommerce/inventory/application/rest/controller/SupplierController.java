@@ -22,7 +22,7 @@ public class SupplierController {
     private final CommandGateway commandGateway;
 
     @PostMapping("/api/v1/suppliers")
-    public ResponseEntity<Void> createSupplier(@Valid @RequestBody CreateSupplierDto dto) throws Exception {
+    public ResponseEntity<Void> createSupplier(@Valid @RequestBody CreateSupplierDto dto) {
         CreateSupplierCommand command = newCreateSupplierCommand(dto);
         commandGateway.send(command);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
@@ -36,7 +36,7 @@ public class SupplierController {
     }
 
     @PutMapping("/api/v1/suppliers")
-    public ResponseEntity<Void> updateSupplier(@Valid @RequestBody UpdateSupplierDto dto) throws Exception {
+    public ResponseEntity<Void> updateSupplier(@Valid @RequestBody UpdateSupplierDto dto) {
         UpdateSupplierCommand command = newUpdateSupplierCommand(dto);
         commandGateway.send(command);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);

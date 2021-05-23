@@ -3,9 +3,9 @@ package org.ashina.ecommerce.customer.registry;
 import org.ashina.ecommerce.customer.application.command.handler.CreateAddressBookCommandHandler;
 import org.ashina.ecommerce.customer.application.command.handler.CreateCustomerCommandHandler;
 import org.ashina.ecommerce.customer.application.command.handler.UpdateAddressBookCommandHandler;
-import org.ashina.ecommerce.customer.infrastructure.uaa.UaaService;
 import org.ashina.ecommerce.customer.infrastructure.persistence.AddressBookPersistence;
 import org.ashina.ecommerce.customer.infrastructure.persistence.CustomerPersistence;
+import org.ashina.ecommerce.customer.infrastructure.uaa.UaaService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
