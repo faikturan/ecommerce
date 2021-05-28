@@ -4,15 +4,11 @@ import lombok.RequiredArgsConstructor;
 import org.ashina.ecommerce.order.application.command.CreateOrderCommand;
 import org.ashina.ecommerce.order.application.error.ErrorCode;
 import org.ashina.ecommerce.order.application.error.ServiceException;
-import org.ashina.ecommerce.order.domain.CartLine;
 import org.ashina.ecommerce.order.domain.Order;
 import org.ashina.ecommerce.order.domain.OrderLine;
 import org.ashina.ecommerce.order.domain.OrderStatus;
-import org.ashina.ecommerce.order.infrastructure.ecommerce.CatalogService;
 import org.ashina.ecommerce.order.infrastructure.ecommerce.InventoryService;
-import org.ashina.ecommerce.order.infrastructure.ecommerce.model.Product;
 import org.ashina.ecommerce.order.infrastructure.event.publisher.OrderCreatedPublisher;
-import org.ashina.ecommerce.order.infrastructure.persistence.CartLinePersistence;
 import org.ashina.ecommerce.order.infrastructure.persistence.OrderPersistence;
 import org.ashina.ecommerce.sharedkernel.command.handler.CommandHandler;
 import org.ashina.ecommerce.sharedkernel.command.model.Command;
@@ -30,8 +26,6 @@ import java.util.stream.Collectors;
 public class CreateOrderCommandHandler implements CommandHandler<CreateOrderCommand> {
 
     private final OrderPersistence orderPersistence;
-    private final CartLinePersistence cartLinePersistence;
-    private final CatalogService catalogService;
     private final InventoryService inventoryService;
     private final OrderCreatedPublisher orderCreatedPublisher;
 
@@ -61,9 +55,6 @@ public class CreateOrderCommandHandler implements CommandHandler<CreateOrderComm
         // Check out of stock
         Map<String, Integer> stockMap = inventoryService.getStocks(productIds);
         checkOutOfStock(stockMap);
-
-        // Get products
-        Map<String, Product> productMap = catalogService.getProducts(productIds);
 
         // Create order
         Order order = newOrder(command.getCustomerId(), cartLines, productMap);

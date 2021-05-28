@@ -1,7 +1,6 @@
 package org.ashina.ecommerce.customer.application.query.model;
 
 import lombok.Data;
-import org.ashina.ecommerce.customer.domain.AddressBook;
 import org.ashina.ecommerce.sharedkernel.query.model.View;
 
 @Data

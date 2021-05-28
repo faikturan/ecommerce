@@ -1,7 +1,6 @@
 package org.ashina.ecommerce.customer.infrastructure.persistence.jpa.adapter;
 
 import lombok.RequiredArgsConstructor;
-import org.ashina.ecommerce.customer.domain.AddressBook;
 import org.ashina.ecommerce.customer.infrastructure.persistence.AddressBookPersistence;
 import org.ashina.ecommerce.customer.infrastructure.persistence.jpa.converter.JpaAddressBookConverter;
 import org.ashina.ecommerce.customer.infrastructure.persistence.jpa.entity.JpaAddressBook;

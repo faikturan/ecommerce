@@ -1,6 +1,5 @@
 package org.ashina.ecommerce.customer.infrastructure.persistence.jpa.converter;
 
-import org.ashina.ecommerce.customer.domain.AddressBook;
 import org.ashina.ecommerce.customer.infrastructure.persistence.jpa.entity.JpaAddressBook;
 import org.ashina.ecommerce.sharedkernel.persistence.PersistenceConverter;
 

@@ -13,6 +13,9 @@ public class Order extends DomainAggregateRoot<String> {
     private String customerId;
     private OrderStatus status;
     private List<OrderLine> lines;
+    private String fullName;
+    private String phoneNumber;
+    private String address;
 
     public Order(String id) {
         super(id);

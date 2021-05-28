@@ -17,11 +17,15 @@ public class JpaOrderConverter implements PersistenceConverter<Order, JpaOrder> 
         JpaOrder jpaOrder = new JpaOrder();
         jpaOrder.setId(order.getId());
         jpaOrder.setCustomerId(order.getCustomerId());
+        jpaOrder.setStatus(order.getStatus());
         jpaOrder.setLines(order.getLines()
                 .stream()
                 .map(jpaOrderLineConverter::mapToPersistentObject)
                 .collect(Collectors.toList())
         );
+        jpaOrder.setFullName(order.getFullName());
+        jpaOrder.setPhoneNumber(order.getPhoneNumber());
+        jpaOrder.setAddress(order.getAddress());
         return jpaOrder;
     }
 
@@ -29,10 +33,14 @@ public class JpaOrderConverter implements PersistenceConverter<Order, JpaOrder> 
     public Order mapToDomainEntity(JpaOrder jpaOrder) {
         Order order = new Order(jpaOrder.getId());
         order.setCustomerId(jpaOrder.getCustomerId());
+        order.setStatus(jpaOrder.getStatus());
         order.setLines(jpaOrder.getLines()
                 .stream()
                 .map(jpaOrderLineConverter::mapToDomainEntity)
                 .collect(Collectors.toList()));
+        order.setFullName(jpaOrder.getFullName());
+        order.setPhoneNumber(jpaOrder.getPhoneNumber());
+        order.setAddress(jpaOrder.getAddress());
         return order;
     }
 }

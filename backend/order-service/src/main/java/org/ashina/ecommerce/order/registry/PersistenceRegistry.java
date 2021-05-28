@@ -1,13 +1,9 @@
 package org.ashina.ecommerce.order.registry;
 
-import org.ashina.ecommerce.order.infrastructure.persistence.CartLinePersistence;
 import org.ashina.ecommerce.order.infrastructure.persistence.OrderPersistence;
-import org.ashina.ecommerce.order.infrastructure.persistence.jpa.adapter.JpaCartLinePersistence;
 import org.ashina.ecommerce.order.infrastructure.persistence.jpa.adapter.JpaOrderPersistence;
-import org.ashina.ecommerce.order.infrastructure.persistence.jpa.converter.JpaCartLineConverter;
 import org.ashina.ecommerce.order.infrastructure.persistence.jpa.converter.JpaOrderConverter;
 import org.ashina.ecommerce.order.infrastructure.persistence.jpa.converter.JpaOrderLineConverter;
-import org.ashina.ecommerce.order.infrastructure.persistence.jpa.repository.JpaCartLineRepository;
 import org.ashina.ecommerce.order.infrastructure.persistence.jpa.repository.JpaOrderRepository;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

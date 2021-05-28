@@ -1,10 +1,7 @@
 package org.ashina.ecommerce.order.registry;
 
-import org.ashina.ecommerce.order.infrastructure.ecommerce.CatalogService;
 import org.ashina.ecommerce.order.infrastructure.ecommerce.InventoryService;
-import org.ashina.ecommerce.order.infrastructure.ecommerce.feign.adapter.FeignCatalogService;
 import org.ashina.ecommerce.order.infrastructure.ecommerce.feign.adapter.FeignInventoryService;
-import org.ashina.ecommerce.order.infrastructure.ecommerce.feign.client.CatalogClient;
 import org.ashina.ecommerce.order.infrastructure.ecommerce.feign.client.InventoryClient;
 import org.springframework.cloud.openfeign.EnableFeignClients;
 import org.springframework.context.annotation.Bean;
@@ -18,7 +15,7 @@ import org.springframework.context.annotation.Configuration;
 public class EcommerceServiceRegistry {
 
     @Bean
-    public CatalogService catalogService(CatalogClient catalogClient) {
+    public CartService catalogService(CatalogClient catalogClient) {
         return new FeignCatalogService(catalogClient);
     }
 

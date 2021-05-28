@@ -9,6 +9,7 @@ public class Command {
 
     protected LocalDateTime createdAt;
     protected boolean hasValidate;
+    protected String authorization;
 
     protected Command() {
         this.createdAt = LocalDateTime.now();

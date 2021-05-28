@@ -24,6 +24,12 @@ public class JpaOrder extends JpaBaseEntity {
 
     private OrderStatus status;
 
+    private String fullName;
+
+    private String phoneNumber;
+
+    private String address;
+
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "order", orphanRemoval = true)
     private List<JpaOrderLine> lines;
 

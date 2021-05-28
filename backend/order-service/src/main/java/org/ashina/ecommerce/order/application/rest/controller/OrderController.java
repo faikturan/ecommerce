@@ -3,7 +3,7 @@ package org.ashina.ecommerce.order.application.rest.controller;
 import lombok.RequiredArgsConstructor;
 import org.ashina.ecommerce.order.application.command.CancelOrderCommand;
 import org.ashina.ecommerce.order.application.command.CreateOrderCommand;
-import org.ashina.ecommerce.order.infrastructure.security.JwtHelper;
+import org.ashina.ecommerce.order.infrastructure.security.SecurityContextHelper;
 import org.ashina.ecommerce.sharedkernel.command.gateway.CommandGateway;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -28,7 +28,7 @@ public class OrderController {
 
     private CreateOrderCommand newCreateOrderCommand(Jwt jwt) {
         CreateOrderCommand command = new CreateOrderCommand();
-        command.setCustomerId(JwtHelper.currentCustomerId(jwt));
+        command.setCustomerId(SecurityContextHelper.currentCustomerId(jwt));
         return command;
     }
 
@@ -42,7 +42,7 @@ public class OrderController {
 
     private CancelOrderCommand newCancelOrderCommand(String orderId, Jwt jwt) {
         CancelOrderCommand command = new CancelOrderCommand();
-        command.setCustomerId(JwtHelper.currentCustomerId(jwt));
+        command.setCustomerId(SecurityContextHelper.currentCustomerId(jwt));
         command.setOrderId(orderId);
         return command;
     }

@@ -1,10 +1,6 @@
 package org.ashina.ecommerce.order.registry;
 
-import org.ashina.ecommerce.order.application.command.handler.AddProductToCartCommandHandler;
-import org.ashina.ecommerce.order.application.command.handler.DeleteCartLineCommandHandler;
-import org.ashina.ecommerce.order.application.command.handler.UpdateCartLineCommandHandler;
-import org.ashina.ecommerce.order.infrastructure.ecommerce.CatalogService;
-import org.ashina.ecommerce.order.infrastructure.persistence.CartLinePersistence;
+import org.ashina.ecommerce.order.application.command.handler.CreateOrderCommandHandler;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -12,9 +8,9 @@ import org.springframework.context.annotation.Configuration;
 public class CommandHandlerRegistry {
 
     @Bean
-    public AddProductToCartCommandHandler addProductToCartCommandHandler(CartLinePersistence cartLinePersistence,
-                                                                         CatalogService catalogService) {
-        return new AddProductToCartCommandHandler(cartLinePersistence, catalogService);
+    public CreateOrderCommandHandler createOrderCommandHandler(CartLinePersistence cartLinePersistence,
+                                                                    CartService catalogService) {
+        return new CreateOrderCommandHandler(cartLinePersistence, catalogService);
     }
 
     @Bean

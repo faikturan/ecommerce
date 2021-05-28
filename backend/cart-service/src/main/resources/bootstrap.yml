@@ -1,0 +1,7 @@
+spring:
+  application:
+    name: cart-service
+  profiles:
+    active: local
+  config:
+    uri: http://localhost:8888
