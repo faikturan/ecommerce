@@ -5,5 +5,5 @@ logging:
   level:
     org.springframework.web.filter.CommonsRequestLoggingFilter: DEBUG
     org.springframework.security: DEBUG
-    org.hibernate.type.descriptor.sql.BasicBinder: TRACE
+    org.springframework.data.mongodb.core.MongoTemplate: DEBUG
     org.ashina.ecommerce: DEBUG

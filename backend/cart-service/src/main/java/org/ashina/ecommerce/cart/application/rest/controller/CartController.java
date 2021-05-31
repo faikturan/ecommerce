@@ -42,7 +42,6 @@ public class CartController {
     private GetCartQuery newGetCartQuery(Jwt jwt) {
         GetCartQuery query = new GetCartQuery();
         query.setCustomerId(SecurityContextHelper.currentCustomerId(jwt));
-        query.setHasValidate(true);
         return query;
     }
 
@@ -91,5 +90,4 @@ public class CartController {
         command.setProductId(productId);
         return command;
     }
-
 }

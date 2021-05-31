@@ -1,7 +1,7 @@
 package org.ashina.ecommerce.catalog.application.rest.handler;
 
 import lombok.Data;
-import org.ashina.ecommerce.customer.application.error.ServiceException;
+import org.ashina.ecommerce.catalog.application.error.ServiceException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;

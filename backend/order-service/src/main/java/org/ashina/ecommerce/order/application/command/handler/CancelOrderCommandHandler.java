@@ -7,29 +7,28 @@ import org.ashina.ecommerce.order.application.error.ServiceException;
 import org.ashina.ecommerce.order.domain.Order;
 import org.ashina.ecommerce.order.domain.OrderStatus;
 import org.ashina.ecommerce.order.infrastructure.event.publisher.OrderCanceledPublisher;
-import org.ashina.ecommerce.order.infrastructure.persistence.OrderPersistence;
+import org.ashina.ecommerce.order.infrastructure.persistence.repository.OrderRepository;
 import org.ashina.ecommerce.sharedkernel.command.handler.CommandHandler;
-import org.ashina.ecommerce.sharedkernel.command.model.Command;
 import org.ashina.ecommerce.sharedkernel.event.model.order.OrderCanceled;
 import org.springframework.http.HttpStatus;
 import org.springframework.transaction.annotation.Transactional;
 
 @RequiredArgsConstructor
-public class CancelOrderCommandHandler implements CommandHandler<CancelOrderCommand> {
+public class CancelOrderCommandHandler implements CommandHandler<CancelOrderCommand, Void> {
 
-    private final OrderPersistence orderPersistence;
+    private final OrderRepository orderRepository;
     private final OrderCanceledPublisher orderCanceledPublisher;
 
     @Override
-    public Class<? extends Command> support() {
+    public Class<?> support() {
         return CancelOrderCommand.class;
     }
 
     @Override
     @Transactional
-    public void handle(CancelOrderCommand command) {
+    public Void handle(CancelOrderCommand command) {
         // Get order
-        Order order = orderPersistence.findById(command.getOrderId())
+        Order order = orderRepository.findById(command.getOrderId())
                 .orElseThrow(() -> ServiceException.of(
                         ErrorCode.ORDER_NOT_FOUND,
                         String.format("Order %s not found", command.getOrderId()),
@@ -49,11 +48,13 @@ public class CancelOrderCommandHandler implements CommandHandler<CancelOrderComm
         order.setStatus(OrderStatus.CANCELED);
 
         // Save order
-        orderPersistence.save(order);
+        orderRepository.save(order);
 
         // Publish event
         OrderCanceled event = newEvent(order);
         orderCanceledPublisher.publish(event);
+
+        return null;
     }
 
     private OrderCanceled newEvent(Order order) {

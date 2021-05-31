@@ -1,31 +1,49 @@
 package org.ashina.ecommerce.sharedkernel.query.gateway;
 
 import org.ashina.ecommerce.sharedkernel.query.handler.QueryHandler;
-import org.ashina.ecommerce.sharedkernel.query.model.Query;
-import org.ashina.ecommerce.sharedkernel.query.model.View;
+import org.ashina.ecommerce.sharedkernel.query.handler.QueryHandlerNotFoundException;
 import org.springframework.context.ApplicationContext;
 
+import javax.validation.ConstraintViolation;
+import javax.validation.ConstraintViolationException;
 import javax.validation.Validator;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
 
-public class DefaultQueryGateway extends QueryGateway {
+public class DefaultQueryGateway implements QueryGateway {
 
     private final ApplicationContext applicationContext;
-    private final Map<Class<? extends Query>, QueryHandler<Query, View>> handlerCache;
+    private final Validator validator;
+    private final Map<Class<?>, QueryHandler<?, ?>> handlerCache;
 
-    public DefaultQueryGateway(Validator validator,
-                               ApplicationContext applicationContext) {
-        super(validator);
+    public DefaultQueryGateway(ApplicationContext applicationContext,
+                               Validator validator) {
         this.applicationContext = applicationContext;
+        this.validator = validator;
         this.handlerCache = new HashMap<>();
     }
 
+    @SuppressWarnings({"unchecked", "rawtypes"})
     @Override
-    @SuppressWarnings("unchecked")
-    protected Optional<QueryHandler<Query, View>> lookupHandler(Query query) {
-        QueryHandler<Query, View> handler = handlerCache.get(query.getClass());
+    public Object execute(Object query) {
+        QueryHandler handler = lookupHandler(query)
+                .orElseThrow(() -> queryHandlerNotFoundException(query));
+        return handler.handle(query);
+    }
+
+    @Override
+    public Object execute(Object query, boolean hasValidate) {
+        if (hasValidate) {
+            validate(query);
+        }
+        return execute(query);
+    }
+
+    @SuppressWarnings("rawtypes")
+    protected Optional<QueryHandler> lookupHandler(Object query) {
+        QueryHandler handler = handlerCache.get(query.getClass());
         if (handler != null) {
             return Optional.of(handler);
         }
@@ -40,4 +58,14 @@ public class DefaultQueryGateway extends QueryGateway {
         return Optional.empty();
     }
 
+    public QueryHandlerNotFoundException queryHandlerNotFoundException(Object query) {
+        return new QueryHandlerNotFoundException(String.format("Not found handler for query %s", query.getClass()));
+    }
+
+    private void validate(Object query) {
+        Set<ConstraintViolation<Object>> constraintViolations = validator.validate(query);
+        if (!constraintViolations.isEmpty()) {
+            throw new ConstraintViolationException(constraintViolations);
+        }
+    }
 }

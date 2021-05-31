@@ -1,15 +1,14 @@
 package org.ashina.ecommerce.cart.application.query.model;
 
 import lombok.Data;
-import org.ashina.ecommerce.cart.domain.CartLine;
+import org.ashina.ecommerce.cart.domain.Cart;
 import org.ashina.ecommerce.cart.infrastructure.ecommerce.model.Product;
-import org.ashina.ecommerce.sharedkernel.query.model.View;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Data
-public class GetCartView extends View {
+public class GetCartView {
 
     @Data
     public static class Line {
@@ -19,7 +18,7 @@ public class GetCartView extends View {
         private Integer productPrice;
         private Integer quantity;
 
-        public Line(CartLine cartLine, Product product) {
+        public Line(Cart.Line cartLine, Product product) {
             this.productId = cartLine.getProductId();
             this.productName = product.getName();
             this.productPrice = product.getPrice();

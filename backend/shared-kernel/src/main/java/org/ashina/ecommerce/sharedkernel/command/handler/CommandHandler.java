@@ -1,10 +1,8 @@
 package org.ashina.ecommerce.sharedkernel.command.handler;
 
-import org.ashina.ecommerce.sharedkernel.command.model.Command;
+public interface CommandHandler<C, R> {
 
-public interface CommandHandler<C extends Command> {
+    Class<?> support();
 
-    Class<? extends Command> support();
-
-    void handle(C command);
+    R handle(C command);
 }

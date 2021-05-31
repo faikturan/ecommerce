@@ -3,35 +3,36 @@ package org.ashina.ecommerce.catalog.application.command.handler;
 import lombok.RequiredArgsConstructor;
 import org.ashina.ecommerce.catalog.application.command.model.CreateProductCommand;
 import org.ashina.ecommerce.catalog.domain.Product;
-import org.ashina.ecommerce.catalog.infrastructure.persistence.ProductPersistence;
-import org.ashina.ecommerce.catalog.infrastructure.search.ProductSearch;
+import org.ashina.ecommerce.catalog.infrastructure.persistence.repository.ProductRepository;
+import org.ashina.ecommerce.catalog.infrastructure.search.SearchProductService;
 import org.ashina.ecommerce.sharedkernel.command.handler.CommandHandler;
-import org.ashina.ecommerce.sharedkernel.command.model.Command;
 import org.ashina.ecommerce.sharedkernel.domain.DomainEntityIdentifierGenerator;
 import org.springframework.transaction.annotation.Transactional;
 
 @RequiredArgsConstructor
-public class CreateProductCommandHandler implements CommandHandler<CreateProductCommand> {
+public class CreateProductCommandHandler implements CommandHandler<CreateProductCommand, Void> {
 
-    private final ProductPersistence productPersistence;
-    private final ProductSearch productSearch;
+    private final ProductRepository productRepository;
+    private final SearchProductService searchProductService;
 
     @Override
-    public Class<? extends Command> support() {
+    public Class<?> support() {
         return CreateProductCommand.class;
     }
 
     @Override
     @Transactional
-    public void handle(CreateProductCommand command) {
+    public Void handle(CreateProductCommand command) {
         // Create product
         Product product = newProduct(command);
 
         // Save DB
-        productPersistence.save(product);
+        productRepository.save(product);
 
         // Index product
-        productSearch.save(product);
+        searchProductService.save(product);
+
+        return null;
     }
 
     private Product newProduct(CreateProductCommand command) {

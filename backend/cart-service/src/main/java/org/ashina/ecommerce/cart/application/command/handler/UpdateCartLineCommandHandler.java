@@ -2,43 +2,51 @@ package org.ashina.ecommerce.cart.application.command.handler;
 
 import lombok.RequiredArgsConstructor;
 import org.ashina.ecommerce.cart.application.command.UpdateCartLineCommand;
-import org.ashina.ecommerce.cart.domain.CartLine;
-import org.ashina.ecommerce.cart.infrastructure.persistence.CartLinePersistence;
+import org.ashina.ecommerce.cart.application.error.ErrorCode;
+import org.ashina.ecommerce.cart.application.error.ServiceException;
+import org.ashina.ecommerce.cart.domain.Cart;
+import org.ashina.ecommerce.cart.infrastructure.persistence.repository.CartRepository;
 import org.ashina.ecommerce.sharedkernel.command.handler.CommandHandler;
-import org.ashina.ecommerce.sharedkernel.command.model.Command;
-import org.ashina.ecommerce.sharedkernel.domain.DomainEntityIdentifierGenerator;
+import org.springframework.http.HttpStatus;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Optional;
-
 @RequiredArgsConstructor
-public class UpdateCartLineCommandHandler implements CommandHandler<UpdateCartLineCommand> {
+public class UpdateCartLineCommandHandler implements CommandHandler<UpdateCartLineCommand, Void> {
 
-    private final CartLinePersistence cartLinePersistence;
+    private final CartRepository cartRepository;
 
     @Override
-    public Class<? extends Command> support() {
+    public Class<?> support() {
         return UpdateCartLineCommand.class;
     }
 
     @Override
     @Transactional
-    public void handle(UpdateCartLineCommand command) {
-        // Create cart line if not exist
-        Optional<CartLine> cartLineOpt = cartLinePersistence.findByCustomerIdAndProductId(
-                command.getCustomerId(), command.getProductId());
-        CartLine cartLine;
-        if (cartLineOpt.isPresent()) {
-            cartLine = cartLineOpt.get();
-            cartLine.setQuantity(command.getQuantity());
-        } else {
-            cartLine = new CartLine(DomainEntityIdentifierGenerator.uuid());
-            cartLine.setCustomerId(command.getCustomerId());
-            cartLine.setProductId(command.getProductId());
-            cartLine.setQuantity(command.getQuantity());
-        }
+    public Void handle(UpdateCartLineCommand command) {
+        // Get cart
+        Cart cart = cartRepository.findByCustomerId(command.getCustomerId())
+                .orElseThrow(() -> ServiceException.of(
+                        ErrorCode.CART_NOT_FOUND,
+                        String.format("Cart of customer %s not found", command.getCustomerId()),
+                        HttpStatus.NOT_FOUND
+                ));
 
-        // Save cart line
-        cartLinePersistence.save(cartLine);
+        // Update cart line
+        Cart.Line line = cart.getLines()
+                .stream()
+                .filter(it -> it.getProductId().equals(command.getCustomerId()))
+                .findAny()
+                .orElseThrow(() -> ServiceException.of(
+                        ErrorCode.PRODUCT_NOT_FOUND,
+                        String.format("Cart of customer %s does not have product %s",
+                                command.getCustomerId(), command.getProductId()),
+                        HttpStatus.NOT_FOUND
+                ));
+        line.setQuantity(command.getQuantity());
+
+        // Save cart
+        cartRepository.save(cart);
+
+        return null;
     }
 }

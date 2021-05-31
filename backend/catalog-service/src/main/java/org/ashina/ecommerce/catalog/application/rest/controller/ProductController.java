@@ -8,7 +8,7 @@ import org.ashina.ecommerce.catalog.application.query.model.GetProductsView;
 import org.ashina.ecommerce.catalog.application.query.model.SearchProductQuery;
 import org.ashina.ecommerce.catalog.application.query.model.SearchProductView;
 import org.ashina.ecommerce.catalog.application.rest.dto.CreateProductDto;
-import org.ashina.ecommerce.sharedkernel.command.gateway.CommandGateway;
+import org.ashina.ecommerce.sharedkernel.command.gateway.DefaultCommandGateway;
 import org.ashina.ecommerce.sharedkernel.query.gateway.QueryGateway;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -26,7 +26,7 @@ import java.util.Collection;
 @Slf4j
 public class ProductController {
 
-    private final CommandGateway commandGateway;
+    private final DefaultCommandGateway commandGateway;
     private final QueryGateway queryGateway;
 
     @GetMapping("/api/v1/products")
@@ -56,7 +56,6 @@ public class ProductController {
         query.setKeyword(keyword);
         query.setPage(page);
         query.setSize(size);
-        query.setHasValidate(true);
         return query;
     }
 
@@ -73,6 +72,7 @@ public class ProductController {
         command.setDescription(dto.getDescription());
         command.setImage(dto.getImage());
         command.setPrice(dto.getPrice());
+        command.setAttributes(dto.getAttributes());
         return command;
     }
 

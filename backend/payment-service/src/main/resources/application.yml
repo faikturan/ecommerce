@@ -1,0 +1,9 @@
+server:
+  port: 8006
+
+logging:
+  level:
+    org.springframework.web.filter.CommonsRequestLoggingFilter: DEBUG
+    org.springframework.security: DEBUG
+    org.hibernate.type.descriptor.sql.BasicBinder: TRACE
+    org.ashina.ecommerce: DEBUG

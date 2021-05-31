@@ -1,13 +1,12 @@
 package org.ashina.ecommerce.catalog.application.query.model;
 
 import lombok.Data;
-import org.ashina.ecommerce.sharedkernel.query.model.View;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Data
-public class GetProductsView extends View {
+public class GetProductsView {
 
     @Data
     public static class Product {
@@ -32,5 +31,4 @@ public class GetProductsView extends View {
                 .map(Product::new)
                 .collect(Collectors.toList());
     }
-
 }

@@ -2,7 +2,7 @@ package org.ashina.ecommerce.cart.registry;
 
 import org.ashina.ecommerce.cart.application.query.handler.GetCartQueryHandler;
 import org.ashina.ecommerce.cart.infrastructure.ecommerce.CatalogService;
-import org.ashina.ecommerce.cart.infrastructure.persistence.CartLinePersistence;
+import org.ashina.ecommerce.cart.infrastructure.persistence.repository.CartRepository;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -10,8 +10,8 @@ import org.springframework.context.annotation.Configuration;
 public class QueryHandlerRegistry {
 
     @Bean
-    public GetCartQueryHandler getCartQueryHandler(CartLinePersistence cartLinePersistence,
+    public GetCartQueryHandler getCartQueryHandler(CartRepository cartRepository,
                                                    CatalogService catalogService) {
-        return new GetCartQueryHandler(cartLinePersistence, catalogService);
+        return new GetCartQueryHandler(cartRepository, catalogService);
     }
 }

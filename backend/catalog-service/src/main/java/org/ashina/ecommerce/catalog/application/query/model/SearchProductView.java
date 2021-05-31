@@ -1,13 +1,12 @@
 package org.ashina.ecommerce.catalog.application.query.model;
 
 import lombok.Data;
-import org.ashina.ecommerce.sharedkernel.query.model.View;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Data
-public class SearchProductView extends View {
+public class SearchProductView {
 
     @Data
     public static class Product {

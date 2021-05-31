@@ -2,7 +2,7 @@ package org.ashina.ecommerce.inventory.application.event.handler;
 
 import lombok.RequiredArgsConstructor;
 import org.ashina.ecommerce.inventory.domain.Stock;
-import org.ashina.ecommerce.inventory.infrastructure.persistence.StockPersistence;
+import org.ashina.ecommerce.inventory.infrastructure.persistence.repository.StockRepository;
 import org.ashina.ecommerce.sharedkernel.event.handler.DomainEventHandler;
 import org.ashina.ecommerce.sharedkernel.event.model.order.OrderCanceled;
 
@@ -14,7 +14,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class OrderCanceledHandler implements DomainEventHandler<OrderCanceled> {
 
-    private final StockPersistence stockPersistence;
+    private final StockRepository stockRepository;
 
     @Override
     public void handle(OrderCanceled event) {
@@ -22,8 +22,8 @@ public class OrderCanceledHandler implements DomainEventHandler<OrderCanceled> {
                 .stream()
                 .collect(Collectors.toMap(OrderCanceled.Line::getProductId, OrderCanceled.Line::getQuantity));
         Set<String> productIds = lineMap.keySet();
-        List<Stock> stocks = stockPersistence.findByProductIdIn(productIds);
+        List<Stock> stocks = stockRepository.findByProductIdIn(productIds);
         stocks.forEach(stock -> stock.setQuantity(stock.getQuantity() + lineMap.get(stock.getProductId())));
-        stockPersistence.saveAll(stocks);
+        stockRepository.saveAll(stocks);
     }
 }

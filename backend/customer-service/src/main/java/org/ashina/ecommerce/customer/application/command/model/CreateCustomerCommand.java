@@ -1,14 +1,13 @@
 package org.ashina.ecommerce.customer.application.command.model;
 
 import lombok.Data;
-import org.ashina.ecommerce.sharedkernel.command.model.Command;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 
 @Data
-public class CreateCustomerCommand extends Command {
+public class CreateCustomerCommand {
 
     @NotBlank
     @Size(max = 100)

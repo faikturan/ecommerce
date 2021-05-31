@@ -12,9 +12,8 @@ import javax.validation.Validator;
 public class QueryGatewayRegistry {
 
     @Bean
-    public QueryGateway queryGateway(Validator validator,
-                                     ApplicationContext applicationContext) {
-        return new DefaultQueryGateway(validator, applicationContext);
+    public QueryGateway queryGateway(ApplicationContext applicationContext,
+                                     Validator validator) {
+        return new DefaultQueryGateway(applicationContext, validator);
     }
-
 }

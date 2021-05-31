@@ -1,13 +1,12 @@
 package org.ashina.ecommerce.inventory.application.query.model;
 
 import lombok.Data;
-import org.ashina.ecommerce.sharedkernel.query.model.View;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Data
-public class GetStocksView extends View {
+public class GetStocksView {
 
     @Data
     public static class Stock {
@@ -28,5 +27,4 @@ public class GetStocksView extends View {
                 .map(Stock::new)
                 .collect(Collectors.toList());
     }
-
 }

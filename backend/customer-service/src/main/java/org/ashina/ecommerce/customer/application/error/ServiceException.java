@@ -2,7 +2,6 @@ package org.ashina.ecommerce.customer.application.error;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 
 @Getter

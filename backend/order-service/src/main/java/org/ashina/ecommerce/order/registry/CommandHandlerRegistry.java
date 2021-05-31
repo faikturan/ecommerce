@@ -1,6 +1,6 @@
 package org.ashina.ecommerce.order.registry;
 
-import org.ashina.ecommerce.order.application.command.handler.CreateOrderCommandHandler;
+import org.ashina.ecommerce.order.application.command.handler.FulfillmentOrderCommandHandler;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -8,9 +8,9 @@ import org.springframework.context.annotation.Configuration;
 public class CommandHandlerRegistry {
 
     @Bean
-    public CreateOrderCommandHandler createOrderCommandHandler(CartLinePersistence cartLinePersistence,
+    public FulfillmentOrderCommandHandler createOrderCommandHandler(CartLinePersistence cartLinePersistence,
                                                                     CartService catalogService) {
-        return new CreateOrderCommandHandler(cartLinePersistence, catalogService);
+        return new FulfillmentOrderCommandHandler(cartLinePersistence, catalogService);
     }
 
     @Bean
