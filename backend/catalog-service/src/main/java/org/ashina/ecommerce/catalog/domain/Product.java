@@ -23,6 +23,8 @@ public class Product extends BaseEntity {
 
     private Map<String, Object> attributes = new HashMap<>();
 
+    private Integer quantity;
+
     public Product(String id) {
         super(id);
     }

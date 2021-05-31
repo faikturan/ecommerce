@@ -24,8 +24,7 @@ public class SearchProductQueryHandler implements QueryHandler<SearchProductQuer
     @Override
     public SearchProductView handle(SearchProductQuery query) {
         List<String> productIds = searchProductService.search(query.getKeyword(), query.getPage(), query.getSize());
-        List<Product> products = productRepository.findAllById(productIds);
+        List<Product> products = (List<Product>) productRepository.findAllById(productIds);
         return new SearchProductView(products);
     }
-
 }

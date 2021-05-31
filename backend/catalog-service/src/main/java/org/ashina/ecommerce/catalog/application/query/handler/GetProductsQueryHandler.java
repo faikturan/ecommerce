@@ -21,7 +21,7 @@ public class GetProductsQueryHandler implements QueryHandler<GetProductsQuery, G
 
     @Override
     public GetProductsView handle(GetProductsQuery query) {
-        List<Product> products = productRepository.findAllById(query.getIds());
+        List<Product> products = (List<Product>) productRepository.findAllById(query.getIds());
         return new GetProductsView(products);
     }
 }
