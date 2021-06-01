@@ -10,7 +10,7 @@ import java.time.LocalDateTime;
 import java.util.Optional;
 
 @Configuration
-@EnableJpaRepositories(basePackages = "org.ashina.ecommerce.customer.infrastructure.persistence.jpa")
+@EnableJpaRepositories(basePackages = "org.ashina.ecommerce.customer.infrastructure.persistence.repository")
 @EnableJpaAuditing(dateTimeProviderRef = "dateTimeProvider")
 public class JpaConfiguration {
 

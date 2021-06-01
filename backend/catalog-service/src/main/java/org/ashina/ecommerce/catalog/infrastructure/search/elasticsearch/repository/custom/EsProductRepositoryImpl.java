@@ -24,7 +24,8 @@ public class EsProductRepositoryImpl implements CustomEsProductRepository {
     @Override
     public List<EsProduct> search(String keyword, Pageable pageable) {
         // 1. Build query
-        QueryBuilder queryBuilder = QueryBuilders.multiMatchQuery(keyword, "name", "description");
+        QueryBuilder queryBuilder = QueryBuilders.boolQuery()
+                .must(QueryBuilders.queryStringQuery("*" + keyword + "*").field("name").field("description"));
         Query searchQuery = new NativeSearchQueryBuilder()
                 .withFilter(queryBuilder)
                 .withPageable(pageable)

@@ -1,8 +1,8 @@
-package org.ashina.ecommerce.catalog.infrastructure.search.elasticsearch.adapter;
+package org.ashina.ecommerce.catalog.infrastructure.search.elasticsearch;
 
 import lombok.RequiredArgsConstructor;
 import org.ashina.ecommerce.catalog.domain.Product;
-import org.ashina.ecommerce.catalog.infrastructure.search.SearchProductService;
+import org.ashina.ecommerce.catalog.infrastructure.search.SearchService;
 import org.ashina.ecommerce.catalog.infrastructure.search.elasticsearch.model.EsProduct;
 import org.ashina.ecommerce.catalog.infrastructure.search.elasticsearch.repository.EsProductRepository;
 import org.springframework.data.domain.PageRequest;
@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
-public class EsSearchProductServiceAdapter implements SearchProductService {
+public class EsSearchService implements SearchService {
 
     private final EsProductRepository repository;
 

@@ -5,7 +5,7 @@ import lombok.Data;
 import javax.validation.constraints.Min;
 
 @Data
-public class SearchProductQuery {
+public class SearchProductsQuery {
 
     private String keyword;
 

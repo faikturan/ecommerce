@@ -4,7 +4,7 @@ import org.ashina.ecommerce.catalog.domain.Product;
 
 import java.util.List;
 
-public interface SearchProductService {
+public interface SearchService {
 
     // Return ID of results
     List<String> search(String keyword, int page, int size);

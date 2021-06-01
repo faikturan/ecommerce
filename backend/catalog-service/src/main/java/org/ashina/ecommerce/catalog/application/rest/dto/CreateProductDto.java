@@ -15,7 +15,6 @@ public class CreateProductDto {
     @Size(max = 255)
     private String name;
 
-    @NotBlank
     @Size(max = 1000)
     private String description;
 

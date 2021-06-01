@@ -10,7 +10,7 @@ import java.time.LocalDateTime;
 import java.util.Optional;
 
 @Configuration
-@EnableMongoRepositories(basePackages = "org.ashina.ecommerce.cart.infrastructure.persistence.jpa")
+@EnableMongoRepositories(basePackages = "org.ashina.ecommerce.catalog.infrastructure.persistence.repository")
 @EnableMongoAuditing(dateTimeProviderRef = "dateTimeProvider")
 public class MongoConfiguration {
 

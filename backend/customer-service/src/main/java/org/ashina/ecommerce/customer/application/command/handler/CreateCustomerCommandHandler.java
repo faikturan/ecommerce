@@ -49,7 +49,8 @@ public class CreateCustomerCommandHandler implements CommandHandler<CreateCustom
     }
 
     private Customer newCustomer(CreateCustomerCommand command) {
-        Customer customer = new Customer(DomainEntityIdentifierGenerator.uuid());
+        Customer customer = new Customer();
+        customer.setId(DomainEntityIdentifierGenerator.uuid());
         customer.setFullName(command.getFullName());
         customer.setEmail(command.getEmail());
         return customer;

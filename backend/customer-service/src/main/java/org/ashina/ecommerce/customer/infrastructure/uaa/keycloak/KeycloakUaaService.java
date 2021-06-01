@@ -1,4 +1,4 @@
-package org.ashina.ecommerce.customer.infrastructure.uaa.keycloak.adapter;
+package org.ashina.ecommerce.customer.infrastructure.uaa.keycloak;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

@@ -16,8 +16,4 @@ public class Customer extends BaseEntity {
     private String fullName;
 
     private String email;
-
-    public Customer(String id) {
-        super(id);
-    }
 }

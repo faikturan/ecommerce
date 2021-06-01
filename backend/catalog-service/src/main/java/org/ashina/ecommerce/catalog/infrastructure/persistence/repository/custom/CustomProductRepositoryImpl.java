@@ -16,16 +16,16 @@ import java.util.Map;
 
 @Repository
 @RequiredArgsConstructor
-public class CustomProductRepositoryAdapter implements CustomProductRepository {
+public class CustomProductRepositoryImpl implements CustomProductRepository {
 
     private final MongoTemplate mongoTemplate;
 
-    private final String FIELD_PRODUCT_ID = "productId";
+    private final String FIELD_ID = "_id";
     private final String FIELD_QUANTITY = "quantity";
 
     @Override
     public void increaseQuantity(String productId, int increment) {
-        Query query = Query.query(Criteria.where(FIELD_PRODUCT_ID).is(productId));
+        Query query = Query.query(Criteria.where(FIELD_ID).is(productId));
         Update update = new Update();
         update.inc(FIELD_QUANTITY, increment);
         mongoTemplate.updateFirst(query, update, Product.class);
@@ -35,7 +35,7 @@ public class CustomProductRepositoryAdapter implements CustomProductRepository {
     public void increaseQuantity(Map<String, Integer> productIdAndIncrementMap) {
         List<Pair<Query, Update>> pairs = new ArrayList<>();
         for (Map.Entry<String, Integer> entry : productIdAndIncrementMap.entrySet()) {
-            Query query = Query.query(Criteria.where(FIELD_PRODUCT_ID).is(entry.getKey()));
+            Query query = Query.query(Criteria.where(FIELD_ID).is(entry.getKey()));
             Update update = new Update();
             update.inc(FIELD_QUANTITY, entry.getValue());
             pairs.add(Pair.of(query, update));

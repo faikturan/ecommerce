@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Data
-public class SearchProductView {
+public class SearchProductsView {
 
     @Data
     public static class Product {
@@ -28,7 +28,7 @@ public class SearchProductView {
 
     private List<Product> products;
 
-    public SearchProductView(List<org.ashina.ecommerce.catalog.domain.Product> domainProducts) {
+    public SearchProductsView(List<org.ashina.ecommerce.catalog.domain.Product> domainProducts) {
         this.products = domainProducts
                 .stream()
                 .map(Product::new)

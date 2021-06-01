@@ -4,7 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.ashina.ecommerce.catalog.application.command.model.CreateProductCommand;
 import org.ashina.ecommerce.catalog.domain.Product;
 import org.ashina.ecommerce.catalog.infrastructure.persistence.repository.ProductRepository;
-import org.ashina.ecommerce.catalog.infrastructure.search.SearchProductService;
+import org.ashina.ecommerce.catalog.infrastructure.search.SearchService;
 import org.ashina.ecommerce.sharedkernel.command.handler.CommandHandler;
 import org.ashina.ecommerce.sharedkernel.domain.DomainEntityIdentifierGenerator;
 import org.springframework.transaction.annotation.Transactional;
@@ -13,7 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class CreateProductCommandHandler implements CommandHandler<CreateProductCommand, Void> {
 
     private final ProductRepository productRepository;
-    private final SearchProductService searchProductService;
+    private final SearchService searchService;
 
     @Override
     public Class<?> support() {
@@ -30,7 +30,7 @@ public class CreateProductCommandHandler implements CommandHandler<CreateProduct
         productRepository.save(product);
 
         // Index product
-        searchProductService.save(product);
+        searchService.save(product);
 
         return null;
     }

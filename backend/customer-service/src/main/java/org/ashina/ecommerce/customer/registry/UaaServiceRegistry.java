@@ -1,7 +1,7 @@
 package org.ashina.ecommerce.customer.registry;
 
 import org.ashina.ecommerce.customer.infrastructure.uaa.UaaService;
-import org.ashina.ecommerce.customer.infrastructure.uaa.keycloak.adapter.KeycloakUaaService;
+import org.ashina.ecommerce.customer.infrastructure.uaa.keycloak.KeycloakUaaService;
 import org.ashina.ecommerce.customer.infrastructure.uaa.keycloak.configuration.KeycloakProperties;
 import org.keycloak.admin.client.Keycloak;
 import org.springframework.context.annotation.Bean;

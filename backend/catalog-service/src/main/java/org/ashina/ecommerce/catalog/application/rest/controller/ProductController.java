@@ -3,11 +3,17 @@ package org.ashina.ecommerce.catalog.application.rest.controller;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.ashina.ecommerce.catalog.application.command.model.CreateProductCommand;
+import org.ashina.ecommerce.catalog.application.command.model.PurchaseProductCommand;
 import org.ashina.ecommerce.catalog.application.query.model.GetProductsQuery;
 import org.ashina.ecommerce.catalog.application.query.model.GetProductsView;
-import org.ashina.ecommerce.catalog.application.query.model.SearchProductQuery;
-import org.ashina.ecommerce.catalog.application.query.model.SearchProductView;
+import org.ashina.ecommerce.catalog.application.query.model.SearchProductsQuery;
+import org.ashina.ecommerce.catalog.application.query.model.SearchProductsView;
 import org.ashina.ecommerce.catalog.application.rest.dto.CreateProductDto;
+import org.ashina.ecommerce.catalog.application.rest.dto.GetProductsDto;
+import org.ashina.ecommerce.catalog.application.rest.dto.PurchaseProductDto;
+import org.ashina.ecommerce.catalog.application.rest.dto.SearchProductsDto;
+import org.ashina.ecommerce.catalog.application.rest.mapper.GetProductsMapper;
+import org.ashina.ecommerce.catalog.application.rest.mapper.SearchProductsMapper;
 import org.ashina.ecommerce.sharedkernel.command.gateway.DefaultCommandGateway;
 import org.ashina.ecommerce.sharedkernel.query.gateway.QueryGateway;
 import org.springframework.http.HttpStatus;
@@ -29,11 +35,12 @@ public class ProductController {
     private final DefaultCommandGateway commandGateway;
     private final QueryGateway queryGateway;
 
-    @GetMapping("/api/v1/products")
-    public ResponseEntity<GetProductsView> getProducts(@RequestParam Collection<String> ids) {
+    @GetMapping(value = "/api/v1/products", params = "action=get")
+    public ResponseEntity<GetProductsDto> getProducts(@RequestParam Collection<String> ids) {
         GetProductsQuery query = newGetProductsQuery(ids);
         GetProductsView view = (GetProductsView) queryGateway.execute(query);
-        return new ResponseEntity<>(view, HttpStatus.OK);
+        GetProductsDto dto = GetProductsMapper.INSTANCE.map(view);
+        return new ResponseEntity<>(dto, HttpStatus.OK);
     }
 
     private GetProductsQuery newGetProductsQuery(Collection<String> ids) {
@@ -42,24 +49,25 @@ public class ProductController {
         return query;
     }
 
-    @GetMapping("/api/v1/products/search")
-    public ResponseEntity<SearchProductView> searchProduct(@RequestParam String keyword,
-                                                           @RequestParam(required = false, defaultValue = "0") int page,
-                                                           @RequestParam(required = false, defaultValue = "20") int size) {
-        SearchProductQuery query = newSearchProductQuery(keyword, page, size);
-        SearchProductView view = (SearchProductView) queryGateway.execute(query);
-        return new ResponseEntity<>(view, HttpStatus.OK);
+    @GetMapping(value = "/api/v1/products", params = "action=search")
+    public ResponseEntity<SearchProductsDto> searchProducts(@RequestParam String keyword,
+                                                            @RequestParam(required = false, defaultValue = "0") int page,
+                                                            @RequestParam(required = false, defaultValue = "20") int size) {
+        SearchProductsQuery query = newSearchProductsQuery(keyword, page, size);
+        SearchProductsView view = (SearchProductsView) queryGateway.execute(query);
+        SearchProductsDto dto = SearchProductsMapper.INSTANCE.map(view);
+        return new ResponseEntity<>(dto, HttpStatus.OK);
     }
 
-    private SearchProductQuery newSearchProductQuery(String keyword, int page, int size) {
-        SearchProductQuery query = new SearchProductQuery();
+    private SearchProductsQuery newSearchProductsQuery(String keyword, int page, int size) {
+        SearchProductsQuery query = new SearchProductsQuery();
         query.setKeyword(keyword);
         query.setPage(page);
         query.setSize(size);
         return query;
     }
 
-    @PostMapping("/api/v1/products")
+    @PostMapping(value = "/api/v1/products", params = "action=create")
     public ResponseEntity<Void> createProduct(@Valid @RequestBody CreateProductDto dto) {
         CreateProductCommand command = newCreateProductCommand(dto);
         commandGateway.send(command);
@@ -76,4 +84,17 @@ public class ProductController {
         return command;
     }
 
+    @PostMapping(value = "/api/v1/products", params = "action=purchase")
+    public ResponseEntity<Void> purchaseProduct(@Valid @RequestBody PurchaseProductDto dto) {
+        PurchaseProductCommand command = newPurchaseProductCommand(dto);
+        commandGateway.send(command);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
+    private PurchaseProductCommand newPurchaseProductCommand(PurchaseProductDto dto) {
+        PurchaseProductCommand command = new PurchaseProductCommand();
+        command.setProductId(dto.getProductId());
+        command.setQuantity(dto.getQuantity());
+        return command;
+    }
 }
