@@ -1,0 +1,7 @@
+spring:
+  application:
+    name: product-service
+  profiles:
+    active: local
+  config:
+    uri: http://localhost:8888

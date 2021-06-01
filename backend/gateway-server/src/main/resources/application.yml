@@ -18,12 +18,12 @@ spring:
         - TokenRelay
         - RemoveRequestHeader=Cookie
       routes:
-        - id: catalog-service
-          uri: lb://CATALOG-SERVICE
+        - id: product-service
+          uri: lb://PRODUCT-SERVICE
           predicates:
-            - Path=/api/catalog-service/**
+            - Path=/api/product-service/**
           filters:
-            - RewritePath=/api/catalog-service/(?<segment>.*), /api/$\{segment}
+            - RewritePath=/api/product-service/(?<segment>.*), /api/$\{segment}
         - id: customer-service
           uri: lb://CUSTOMER-SERVICE
           predicates:

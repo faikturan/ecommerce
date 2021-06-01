@@ -1,8 +1,9 @@
 server:
-  port: 8003
+  port: 8001
 
 logging:
   level:
     org.springframework.web.filter.CommonsRequestLoggingFilter: DEBUG
     org.springframework.data.mongodb.core.MongoTemplate: DEBUG
+    org.springframework.data.elasticsearch.client.WIRE: trace
     org.ashina.ecommerce: DEBUG
