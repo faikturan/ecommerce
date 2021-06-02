@@ -1,12 +1,14 @@
 package org.ashina.ecommerce.cart.application.query.model;
 
-import lombok.Data;
+import lombok.Builder;
+import lombok.Getter;
 
 import javax.validation.constraints.NotBlank;
 
-@Data
+@Getter
+@Builder
 public class GetCartQuery {
 
     @NotBlank
-    private String customerId;
+    private final String customerId;
 }

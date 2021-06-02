@@ -1,4 +1,4 @@
-package org.ashina.ecommerce.product.application.rest.dto;
+package org.ashina.ecommerce.cart.infrastructure.ecommerce.feign.model;
 
 import lombok.Data;
 

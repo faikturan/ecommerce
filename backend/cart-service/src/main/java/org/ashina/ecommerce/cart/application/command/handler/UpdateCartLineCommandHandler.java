@@ -8,8 +8,10 @@ import org.ashina.ecommerce.cart.domain.Cart;
 import org.ashina.ecommerce.cart.infrastructure.persistence.repository.CartRepository;
 import org.ashina.ecommerce.sharedkernel.command.handler.CommandHandler;
 import org.springframework.http.HttpStatus;
+import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
+@Component
 @RequiredArgsConstructor
 public class UpdateCartLineCommandHandler implements CommandHandler<UpdateCartLineCommand, Void> {
 

@@ -6,6 +6,7 @@ import org.ashina.ecommerce.product.application.event.handler.OrderCanceledHandl
 import org.ashina.ecommerce.product.infrastructure.event.subscriber.OrderCanceledSubscriber;
 import org.ashina.ecommerce.sharedkernel.event.model.order.OrderCanceled;
 import org.springframework.cloud.stream.annotation.StreamListener;
+import org.springframework.kafka.support.Acknowledgment;
 import org.springframework.kafka.support.KafkaHeaders;
 import org.springframework.messaging.handler.annotation.Headers;
 import org.springframework.messaging.handler.annotation.Payload;
@@ -20,7 +21,7 @@ public class KafkaOrderCanceledSubscriber implements OrderCanceledSubscriber {
 
     @Override
     @StreamListener(OrderCanceledSink.INPUT)
-    public void subscribe(@Payload OrderCanceled event, @Headers Map<String, Object> headers) {
+    public void subscribe(@Payload OrderCanceled event, @Headers Map<String, Object> headers, Acknowledgment acknowledgment) {
         log.info("Received event: {}. Partition: {}. Offset: {}",
                 event, headers.get(KafkaHeaders.RECEIVED_PARTITION_ID), headers.get(KafkaHeaders.OFFSET));
         orderCanceledHandler.handle(event);

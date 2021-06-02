@@ -2,7 +2,7 @@ package org.ashina.ecommerce.cart.application.query.model;
 
 import lombok.Data;
 import org.ashina.ecommerce.cart.domain.Cart;
-import org.ashina.ecommerce.cart.infrastructure.ecommerce.model.Product;
+import org.ashina.ecommerce.cart.infrastructure.ecommerce.feign.model.GetProductsDto;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,12 +15,14 @@ public class GetCartView {
 
         private String productId;
         private String productName;
+        private String productImage;
         private Integer productPrice;
         private Integer quantity;
 
-        public Line(Cart.Line cartLine, Product product) {
+        public Line(Cart.Line cartLine, GetProductsDto.Product product) {
             this.productId = cartLine.getProductId();
             this.productName = product.getName();
+            this.productImage = product.getImage();
             this.productPrice = product.getPrice();
             this.quantity = cartLine.getQuantity();
         }

@@ -9,7 +9,7 @@ public class AuthorizationRequestInterceptor implements RequestInterceptor {
 
     @Override
     public void apply(RequestTemplate requestTemplate) {
-        String accessToken = SecurityContextHelper.getCurrentAccessToken();
+        String accessToken = "Bearer " + SecurityContextHelper.getCurrentAccessToken();
         requestTemplate.header(HttpHeaders.AUTHORIZATION, accessToken);
     }
 }

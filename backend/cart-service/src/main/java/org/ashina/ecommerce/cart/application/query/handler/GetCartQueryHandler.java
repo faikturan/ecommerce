@@ -6,22 +6,23 @@ import org.ashina.ecommerce.cart.application.error.ServiceException;
 import org.ashina.ecommerce.cart.application.query.model.GetCartQuery;
 import org.ashina.ecommerce.cart.application.query.model.GetCartView;
 import org.ashina.ecommerce.cart.domain.Cart;
-import org.ashina.ecommerce.cart.infrastructure.ecommerce.CatalogService;
-import org.ashina.ecommerce.cart.infrastructure.ecommerce.model.Product;
+import org.ashina.ecommerce.cart.infrastructure.ecommerce.feign.client.ProductClient;
+import org.ashina.ecommerce.cart.infrastructure.ecommerce.feign.model.GetProductsDto;
 import org.ashina.ecommerce.cart.infrastructure.persistence.repository.CartRepository;
 import org.ashina.ecommerce.sharedkernel.query.handler.QueryHandler;
 import org.springframework.http.HttpStatus;
+import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
+@Component
 @RequiredArgsConstructor
 public class GetCartQueryHandler implements QueryHandler<GetCartQuery, GetCartView> {
 
     private final CartRepository cartRepository;
-    private final CatalogService catalogService;
+    private final ProductClient productClient;
 
     @Override
     public Class<?> support() {
@@ -48,19 +49,19 @@ public class GetCartQueryHandler implements QueryHandler<GetCartQuery, GetCartVi
                 .stream()
                 .map(Cart.Line::getProductId)
                 .collect(Collectors.toList());
-        Map<String, Product> productMap = catalogService.getProducts(productIds);
+        GetProductsDto getProductsDto = productClient.getProducts(productIds);
 
         // Process each cart line
         int total = 0;
         for (Cart.Line line : cart.getLines()) {
-            Product product = productMap.get(line.getProductId());
-            if (product == null) {
-                throw ServiceException.of(
-                        ErrorCode.PRODUCT_NOT_FOUND,
-                        String.format("Product %s not found", line.getProductId()),
-                        HttpStatus.NOT_FOUND
-                );
-            }
+            GetProductsDto.Product product = getProductsDto.getProducts().stream()
+                    .filter(it -> it.getId().equals(line.getProductId()))
+                    .findAny()
+                    .orElseThrow(() -> ServiceException.of(
+                            ErrorCode.PRODUCT_NOT_FOUND,
+                            String.format("Product %s not found", line.getProductId()),
+                            HttpStatus.NOT_FOUND
+                    ));
             view.addLine(new GetCartView.Line(line, product));
             total += product.getPrice() * line.getQuantity();
         }

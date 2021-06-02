@@ -1,18 +1,21 @@
 package org.ashina.ecommerce.cart.application.command;
 
-import lombok.Data;
+import lombok.Builder;
+import lombok.Getter;
 
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 
-@Data
+@Getter
+@Builder
 public class AddProductToCartCommand {
 
     @NotBlank
-    private String customerId;
+    private final String customerId;
 
     @NotBlank
-    private String productId;
+    private final String productId;
 
-    @NotBlank
-    private Integer quantity;
+    @NotNull
+    private final Integer quantity;
 }

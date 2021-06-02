@@ -10,10 +10,12 @@ import org.ashina.ecommerce.customer.infrastructure.uaa.UaaService;
 import org.ashina.ecommerce.sharedkernel.command.handler.CommandHandler;
 import org.ashina.ecommerce.sharedkernel.domain.DomainEntityIdentifierGenerator;
 import org.springframework.http.HttpStatus;
+import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
+@Component
 @RequiredArgsConstructor
 public class CreateCustomerCommandHandler implements CommandHandler<CreateCustomerCommand, Void> {
 

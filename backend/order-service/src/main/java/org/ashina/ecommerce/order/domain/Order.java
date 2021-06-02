@@ -18,6 +18,9 @@ public class Order extends BaseEntity {
     public static class Line {
 
         private String productId;
+        private String productName;
+        private String productImage;
+        private Integer productPrice;
         private Integer quantity;
 
         public static final int MAX_QUANTITY = 10;

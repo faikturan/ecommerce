@@ -26,11 +26,10 @@ public class CustomerController {
     }
 
     private CreateCustomerCommand newCreateCustomerCommand(CreateCustomerDto dto) {
-        CreateCustomerCommand command = new CreateCustomerCommand();
-        command.setFullName(dto.getFullName());
-        command.setEmail(dto.getEmail());
-        command.setPassword(dto.getPassword());
-        return command;
+        return CreateCustomerCommand.builder()
+                .fullName(dto.getFullName())
+                .email(dto.getEmail())
+                .password(dto.getPassword())
+                .build();
     }
-
 }

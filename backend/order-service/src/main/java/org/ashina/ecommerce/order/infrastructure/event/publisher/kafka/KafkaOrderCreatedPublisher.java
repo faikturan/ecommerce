@@ -18,5 +18,4 @@ public class KafkaOrderCreatedPublisher implements OrderCreatedPublisher {
         source.output().send(message);
         log.info("Publish event {}", event);
     }
-
 }

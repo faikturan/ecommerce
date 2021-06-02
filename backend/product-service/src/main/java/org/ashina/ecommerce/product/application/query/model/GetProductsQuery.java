@@ -1,11 +1,15 @@
 package org.ashina.ecommerce.product.application.query.model;
 
-import lombok.Data;
+import lombok.Builder;
+import lombok.Getter;
 
+import javax.validation.constraints.NotEmpty;
 import java.util.Collection;
 
-@Data
+@Getter
+@Builder
 public class GetProductsQuery {
 
-    private Collection<String> ids;
+    @NotEmpty
+    private final Collection<String> ids;
 }

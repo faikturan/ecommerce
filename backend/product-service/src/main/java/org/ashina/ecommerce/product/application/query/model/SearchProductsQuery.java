@@ -1,17 +1,19 @@
 package org.ashina.ecommerce.product.application.query.model;
 
-import lombok.Data;
+import lombok.Builder;
+import lombok.Getter;
 
 import javax.validation.constraints.Min;
 
-@Data
+@Getter
+@Builder
 public class SearchProductsQuery {
 
-    private String keyword;
+    private final String keyword;
 
     @Min(0)
-    private Integer page;
+    private final Integer page;
 
     @Min(1)
-    private Integer size;
+    private final Integer size;
 }

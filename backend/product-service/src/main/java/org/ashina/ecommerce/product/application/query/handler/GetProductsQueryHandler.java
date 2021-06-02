@@ -6,9 +6,11 @@ import org.ashina.ecommerce.product.application.query.model.GetProductsView;
 import org.ashina.ecommerce.product.domain.Product;
 import org.ashina.ecommerce.product.infrastructure.persistence.repository.ProductRepository;
 import org.ashina.ecommerce.sharedkernel.query.handler.QueryHandler;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
 
+@Component
 @RequiredArgsConstructor
 public class GetProductsQueryHandler implements QueryHandler<GetProductsQuery, GetProductsView> {
 

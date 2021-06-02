@@ -1,18 +1,20 @@
 package org.ashina.ecommerce.product.application.command.model;
 
-import lombok.Data;
+import lombok.Builder;
+import lombok.Getter;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
 
-@Data
+@Getter
+@Builder
 public class PurchaseProductCommand {
 
     @NotBlank
-    private String productId;
+    private final String productId;
 
     @NotNull
     @Positive
-    private Integer quantity;
+    private final Integer quantity;
 }

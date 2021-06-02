@@ -11,8 +11,10 @@ import org.ashina.ecommerce.order.infrastructure.persistence.repository.OrderRep
 import org.ashina.ecommerce.sharedkernel.command.handler.CommandHandler;
 import org.ashina.ecommerce.sharedkernel.event.model.order.OrderCanceled;
 import org.springframework.http.HttpStatus;
+import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
+@Component
 @RequiredArgsConstructor
 public class CancelOrderCommandHandler implements CommandHandler<CancelOrderCommand, Void> {
 

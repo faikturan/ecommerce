@@ -1,6 +1,7 @@
 package org.ashina.ecommerce.product.application.command.model;
 
-import lombok.Data;
+import lombok.Builder;
+import lombok.Getter;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
@@ -8,24 +9,25 @@ import javax.validation.constraints.Positive;
 import javax.validation.constraints.Size;
 import java.util.Map;
 
-@Data
+@Getter
+@Builder
 public class CreateProductCommand {
 
     @NotBlank
     @Size(max = 255)
-    private String name;
+    private final String name;
 
     @NotBlank
     @Size(max = 1000)
-    private String description;
+    private final String description;
 
     @NotBlank
     @Size(max = 255)
-    private String image;
+    private final String image;
 
     @NotNull
     @Positive
-    private Integer price;
+    private final Integer price;
 
-    private Map<String, Object> attributes;
+    private final Map<String, Object> attributes;
 }

@@ -7,7 +7,9 @@ import org.ashina.ecommerce.cart.application.command.UpdateCartLineCommand;
 import org.ashina.ecommerce.cart.application.query.model.GetCartQuery;
 import org.ashina.ecommerce.cart.application.query.model.GetCartView;
 import org.ashina.ecommerce.cart.application.rest.dto.AddProductToCartDto;
+import org.ashina.ecommerce.cart.application.rest.dto.GetCartDto;
 import org.ashina.ecommerce.cart.application.rest.dto.UpdateCartLineDto;
+import org.ashina.ecommerce.cart.application.rest.mapper.GetCartMapper;
 import org.ashina.ecommerce.cart.infrastructure.security.SecurityContextHelper;
 import org.ashina.ecommerce.sharedkernel.command.gateway.CommandGateway;
 import org.ashina.ecommerce.sharedkernel.query.gateway.QueryGateway;
@@ -33,16 +35,17 @@ public class CartController {
     private final CommandGateway commandGateway;
 
     @GetMapping("/api/v1/carts")
-    public ResponseEntity<GetCartView> getCart(@AuthenticationPrincipal Jwt jwt) {
+    public ResponseEntity<GetCartDto> getCart(@AuthenticationPrincipal Jwt jwt) {
         GetCartQuery query = newGetCartQuery(jwt);
         GetCartView view = (GetCartView) queryGateway.execute(query);
-        return new ResponseEntity<>(view, HttpStatus.OK);
+        GetCartDto dto = GetCartMapper.INSTANCE.map(view);
+        return new ResponseEntity<>(dto, HttpStatus.OK);
     }
 
     private GetCartQuery newGetCartQuery(Jwt jwt) {
-        GetCartQuery query = new GetCartQuery();
-        query.setCustomerId(SecurityContextHelper.currentCustomerId(jwt));
-        return query;
+        return GetCartQuery.builder()
+                .customerId(SecurityContextHelper.currentCustomerId(jwt))
+                .build();
     }
 
     @PostMapping("/api/v1/carts/add-product")
@@ -54,15 +57,15 @@ public class CartController {
     }
 
     private AddProductToCartCommand newAddProductToCartCommand(AddProductToCartDto dto, Jwt jwt) {
-        AddProductToCartCommand command = new AddProductToCartCommand();
-        command.setCustomerId(SecurityContextHelper.currentCustomerId(jwt));
-        command.setProductId(dto.getProductId());
-        command.setQuantity(dto.getQuantity());
-        return command;
+        return AddProductToCartCommand.builder()
+                .customerId(SecurityContextHelper.currentCustomerId(jwt))
+                .productId(dto.getProductId())
+                .quantity(dto.getQuantity())
+                .build();
     }
 
     @PutMapping("/api/v1/carts/lines")
-    public ResponseEntity<Void> updateLine(@Valid @RequestBody UpdateCartLineDto dto,
+    public ResponseEntity<Void> updateCartLine(@Valid @RequestBody UpdateCartLineDto dto,
                                            @AuthenticationPrincipal Jwt jwt) {
         UpdateCartLineCommand command = newUpdateCartLineCommand(dto, jwt);
         commandGateway.send(command);
@@ -71,23 +74,23 @@ public class CartController {
 
     private UpdateCartLineCommand newUpdateCartLineCommand(UpdateCartLineDto dto,
                                                            Jwt jwt) {
-        UpdateCartLineCommand command = new UpdateCartLineCommand();
-        command.setCustomerId(SecurityContextHelper.currentCustomerId(jwt));
-        command.setProductId(dto.getProductId());
-        command.setQuantity(dto.getQuantity());
-        return command;
+        return UpdateCartLineCommand.builder()
+                .customerId(SecurityContextHelper.currentCustomerId(jwt))
+                .productId(dto.getProductId())
+                .quantity(dto.getQuantity())
+                .build();
     }
 
     @DeleteMapping("/api/v1/carts/lines/{productId}")
-    public ResponseEntity<Void> deleteLine(@PathVariable String productId) {
+    public ResponseEntity<Void> deleteCartLine(@PathVariable String productId) {
         DeleteCartLineCommand command = newDeleteCartLineCommand(productId);
         commandGateway.send(command);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
     private DeleteCartLineCommand newDeleteCartLineCommand(String productId) {
-        DeleteCartLineCommand command = new DeleteCartLineCommand();
-        command.setProductId(productId);
-        return command;
+        return DeleteCartLineCommand.builder()
+                .productId(productId)
+                .build();
     }
 }

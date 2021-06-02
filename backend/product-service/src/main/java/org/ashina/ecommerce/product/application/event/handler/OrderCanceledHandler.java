@@ -4,10 +4,12 @@ import lombok.RequiredArgsConstructor;
 import org.ashina.ecommerce.product.infrastructure.persistence.repository.ProductRepository;
 import org.ashina.ecommerce.sharedkernel.event.handler.DomainEventHandler;
 import org.ashina.ecommerce.sharedkernel.event.model.order.OrderCanceled;
+import org.springframework.stereotype.Component;
 
 import java.util.Map;
 import java.util.stream.Collectors;
 
+@Component
 @RequiredArgsConstructor
 public class OrderCanceledHandler implements DomainEventHandler<OrderCanceled> {
 

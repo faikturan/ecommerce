@@ -1,12 +1,15 @@
 package org.ashina.ecommerce.order.application.command;
 
+import lombok.Builder;
 import lombok.Data;
+import lombok.Getter;
 
 import javax.validation.constraints.NotBlank;
 
-@Data
+@Getter
+@Builder
 public class FulfillmentOrderCommand {
 
     @NotBlank
-    private String customerId;
+    private final String customerId;
 }

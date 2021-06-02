@@ -12,10 +12,12 @@ import org.ashina.ecommerce.order.infrastructure.persistence.repository.OrderRep
 import org.ashina.ecommerce.sharedkernel.command.handler.CommandHandler;
 import org.ashina.ecommerce.sharedkernel.event.model.order.OrderCreated;
 import org.springframework.http.HttpStatus;
+import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Map;
 
+@Component
 @RequiredArgsConstructor
 public class FulfillmentOrderCommandHandler implements CommandHandler<FulfillmentOrderCommand, Void> {
 

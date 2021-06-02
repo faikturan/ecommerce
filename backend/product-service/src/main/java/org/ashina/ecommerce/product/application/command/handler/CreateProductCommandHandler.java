@@ -7,8 +7,10 @@ import org.ashina.ecommerce.product.infrastructure.persistence.repository.Produc
 import org.ashina.ecommerce.product.infrastructure.search.SearchService;
 import org.ashina.ecommerce.sharedkernel.command.handler.CommandHandler;
 import org.ashina.ecommerce.sharedkernel.domain.DomainEntityIdentifierGenerator;
+import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
+@Component
 @RequiredArgsConstructor
 public class CreateProductCommandHandler implements CommandHandler<CreateProductCommand, Void> {
 

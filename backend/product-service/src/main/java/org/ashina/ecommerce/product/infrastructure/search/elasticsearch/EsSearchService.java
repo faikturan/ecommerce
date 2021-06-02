@@ -34,7 +34,7 @@ public class EsSearchService implements SearchService {
     public void save(Product product) {
         EsProduct esProduct = newElasticsearchProduct(product);
         repository.save(esProduct);
-        log.debug("Index product {} done", product.getId());
+        log.debug("Create product document {} done", product.getId());
     }
 
     private EsProduct newElasticsearchProduct(Product product) {
@@ -43,5 +43,12 @@ public class EsSearchService implements SearchService {
         esProduct.setName(product.getName());
         esProduct.setDescription(product.getDescription());
         return esProduct;
+    }
+
+    @Override
+    @Async("elasticsearchIndexingTaskExecutor")
+    public void delete(String productId) {
+        repository.deleteById(productId);
+        log.debug("Delete product document {} done", productId);
     }
 }

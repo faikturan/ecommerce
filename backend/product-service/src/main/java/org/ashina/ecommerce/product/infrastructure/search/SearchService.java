@@ -10,4 +10,6 @@ public interface SearchService {
     List<String> search(String keyword, int page, int size);
 
     void save(Product product);
+
+    void delete(String productId);
 }

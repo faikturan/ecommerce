@@ -1,19 +1,21 @@
 package org.ashina.ecommerce.cart.application.command;
 
-import lombok.Data;
+import lombok.Builder;
+import lombok.Getter;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
-@Data
+@Getter
+@Builder
 public class UpdateCartLineCommand {
 
     @NotBlank
-    private String customerId;
+    private final String customerId;
 
     @NotBlank
-    private String productId;
+    private final String productId;
 
     @NotNull
-    private Integer quantity;
+    private final Integer quantity;
 }

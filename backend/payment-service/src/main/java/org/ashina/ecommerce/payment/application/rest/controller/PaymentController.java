@@ -26,9 +26,9 @@ public class PaymentController {
     }
 
     private CreatePaymentCommand newCreatePaymentCommand(CreatePaymentDto dto) {
-        CreatePaymentCommand command = new CreatePaymentCommand();
-        command.setOrderId(dto.getOrderId());
-        command.setAmount(dto.getAmount());
-        return command;
+        return CreatePaymentCommand.builder()
+                .orderId(dto.getOrderId())
+                .amount(dto.getAmount())
+                .build();
     }
 }

@@ -5,20 +5,20 @@ import org.ashina.ecommerce.cart.application.command.AddProductToCartCommand;
 import org.ashina.ecommerce.cart.application.error.ErrorCode;
 import org.ashina.ecommerce.cart.application.error.ServiceException;
 import org.ashina.ecommerce.cart.domain.Cart;
-import org.ashina.ecommerce.cart.infrastructure.ecommerce.CatalogService;
 import org.ashina.ecommerce.cart.infrastructure.persistence.repository.CartRepository;
 import org.ashina.ecommerce.sharedkernel.command.handler.CommandHandler;
 import org.ashina.ecommerce.sharedkernel.domain.DomainEntityIdentifierGenerator;
 import org.springframework.http.HttpStatus;
+import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
+@Component
 @RequiredArgsConstructor
 public class AddProductToCartCommandHandler implements CommandHandler<AddProductToCartCommand, Void> {
 
     private final CartRepository cartRepository;
-    private final CatalogService catalogService;
 
     @Override
     public Class<?> support() {
@@ -37,18 +37,10 @@ public class AddProductToCartCommandHandler implements CommandHandler<AddProduct
                     return newCart;
                 });
 
-        // Get product
-        catalogService.getProduct(command.getProductId())
-                .orElseThrow(() -> ServiceException.of(
-                        ErrorCode.PRODUCT_NOT_FOUND,
-                        String.format("Product %s not found", command.getProductId()),
-                        HttpStatus.NOT_FOUND
-                ));
-
         // Create new cart line if not exist
         Optional<Cart.Line> lineOpt = cart.getLines()
                 .stream()
-                .filter(line -> line.getProductId().equals(command.getCustomerId()))
+                .filter(line -> line.getProductId().equals(command.getProductId()))
                 .findAny();
         Cart.Line line;
         if (lineOpt.isPresent()) {

@@ -16,8 +16,4 @@ public class Payment extends BaseEntity {
     private String orderId;
 
     private Integer amount;
-
-    public Payment(String id) {
-        super(id);
-    }
 }

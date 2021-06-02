@@ -3,6 +3,7 @@ package org.ashina.ecommerce.sharedkernel.query.gateway;
 import org.ashina.ecommerce.sharedkernel.query.handler.QueryHandler;
 import org.ashina.ecommerce.sharedkernel.query.handler.QueryHandlerNotFoundException;
 import org.springframework.context.ApplicationContext;
+import org.springframework.stereotype.Component;
 
 import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
@@ -12,6 +13,7 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 
+@Component
 public class DefaultQueryGateway implements QueryGateway {
 
     private final ApplicationContext applicationContext;

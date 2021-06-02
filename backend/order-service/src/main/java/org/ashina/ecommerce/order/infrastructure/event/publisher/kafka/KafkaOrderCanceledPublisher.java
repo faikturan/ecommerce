@@ -18,5 +18,4 @@ public class KafkaOrderCanceledPublisher implements OrderCanceledPublisher {
         source.output().send(message);
         log.info("Publish event {}", event);
     }
-
 }
