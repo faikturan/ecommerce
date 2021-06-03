@@ -1,5 +1,6 @@
 package org.ashina.ecommerce.product.infrastructure.persistence.repository.custom;
 
+import com.mongodb.bulk.BulkWriteResult;
 import lombok.RequiredArgsConstructor;
 import org.ashina.ecommerce.product.domain.Product;
 import org.springframework.data.mongodb.core.BulkOperations;
@@ -40,7 +41,8 @@ public class CustomProductRepositoryImpl implements CustomProductRepository {
             update.inc(FIELD_QUANTITY, entry.getValue());
             pairs.add(Pair.of(query, update));
         }
-        mongoTemplate.bulkOps(BulkOperations.BulkMode.UNORDERED, Product.class)
-                .updateMulti(pairs);
+        BulkWriteResult result = mongoTemplate.bulkOps(BulkOperations.BulkMode.UNORDERED, Product.class)
+                .updateMulti(pairs)
+                .execute();
     }
 }

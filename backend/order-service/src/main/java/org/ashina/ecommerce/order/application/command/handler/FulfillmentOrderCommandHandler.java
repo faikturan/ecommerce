@@ -8,12 +8,12 @@ import org.ashina.ecommerce.order.domain.FulfillmentTransaction;
 import org.ashina.ecommerce.order.domain.Order;
 import org.ashina.ecommerce.order.infrastructure.ecommerce.feign.client.CartClient;
 import org.ashina.ecommerce.order.infrastructure.ecommerce.feign.model.GetCartDto;
-import org.ashina.ecommerce.order.infrastructure.event.publisher.ProductReservedRequestPublisher;
+import org.ashina.ecommerce.order.infrastructure.event.publisher.ReserveProductPublisher;
 import org.ashina.ecommerce.order.infrastructure.persistence.repository.FulfillmentTransactionRepository;
 import org.ashina.ecommerce.order.infrastructure.persistence.repository.OrderRepository;
 import org.ashina.ecommerce.sharedkernel.command.handler.CommandHandler;
 import org.ashina.ecommerce.sharedkernel.domain.DomainEntityIdentifierGenerator;
-import org.ashina.ecommerce.sharedkernel.event.model.product.ProductReservedRequest;
+import org.ashina.ecommerce.sharedkernel.event.model.product.ReserveProductRequested;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -27,7 +27,7 @@ public class FulfillmentOrderCommandHandler implements CommandHandler<Fulfillmen
     private final CartClient cartClient;
     private final OrderRepository orderRepository;
     private final FulfillmentTransactionRepository fulfillmentTransactionRepository;
-    private final ProductReservedRequestPublisher productReservedRequestPublisher;
+    private final ReserveProductPublisher reserveProductPublisher;
 
     @Override
     public Class<?> support() {
@@ -50,8 +50,8 @@ public class FulfillmentOrderCommandHandler implements CommandHandler<Fulfillmen
         fulfillmentTransactionRepository.save(fulfillmentTransaction);
 
         // Publish product reserved request
-        ProductReservedRequest productReservedRequest = new ProductReservedRequest();
-        productReservedRequestPublisher.publish(productReservedRequest);
+        ReserveProductRequested reserveProductRequested = new ReserveProductRequested();
+        reserveProductPublisher.publish(reserveProductRequested);
 
         return null;
     }
@@ -96,11 +96,11 @@ public class FulfillmentOrderCommandHandler implements CommandHandler<Fulfillmen
         return transaction;
     }
 
-    private ProductReservedRequest newProductReservedRequest(String transactionId, List<Order.Line> orderLines) {
-        ProductReservedRequest event = new ProductReservedRequest();
+    private ReserveProductRequested newProductReservedRequest(String transactionId, List<Order.Line> orderLines) {
+        ReserveProductRequested event = new ReserveProductRequested();
         event.setTransactionId(transactionId);
         orderLines.forEach(orderLine -> {
-            ProductReservedRequest.Line eventLine = new ProductReservedRequest.Line();
+            ReserveProductRequested.Line eventLine = new ReserveProductRequested.Line();
             eventLine.setProductId(orderLine.getProductId());
             eventLine.setQuantity(orderLine.getQuantity());
             event.addLine(eventLine);

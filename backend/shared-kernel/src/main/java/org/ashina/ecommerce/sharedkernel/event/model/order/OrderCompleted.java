@@ -8,6 +8,6 @@ import org.ashina.ecommerce.sharedkernel.event.model.DomainEvent;
 @Setter
 public class OrderCompleted extends DomainEvent {
 
-    private String transactionId;
     private String customerId;
+    private String orderId;
 }
