@@ -3,10 +3,10 @@ package org.ashina.ecommerce.order.infrastructure.event.publisher.kafka;
 import org.springframework.cloud.stream.annotation.Output;
 import org.springframework.messaging.MessageChannel;
 
-public interface OrderCreatedSource {
+public interface ProductReservedRequestSource {
 
-    String OUTPUT = "order-created-out";
+    String OUTPUT = "product-reserved-request-out";
 
-    @Output(OrderCreatedSource.OUTPUT)
+    @Output(ProductReservedRequestSource.OUTPUT)
     MessageChannel output();
 }

@@ -12,4 +12,13 @@ public class FulfillmentOrderCommand {
 
     @NotBlank
     private final String customerId;
+
+    @NotBlank
+    private final String fullName;
+
+    @NotBlank
+    private final String phoneNumber;
+
+    @NotBlank
+    private final String address;
 }

@@ -5,7 +5,6 @@ import org.ashina.ecommerce.order.application.command.CancelOrderCommand;
 import org.ashina.ecommerce.order.application.error.ErrorCode;
 import org.ashina.ecommerce.order.application.error.ServiceException;
 import org.ashina.ecommerce.order.domain.Order;
-import org.ashina.ecommerce.order.domain.OrderStatus;
 import org.ashina.ecommerce.order.infrastructure.event.publisher.OrderCanceledPublisher;
 import org.ashina.ecommerce.order.infrastructure.persistence.repository.OrderRepository;
 import org.ashina.ecommerce.sharedkernel.command.handler.CommandHandler;

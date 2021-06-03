@@ -1,5 +1,6 @@
-package org.ashina.ecommerce.sharedkernel.event.model.order;
+package org.ashina.ecommerce.sharedkernel.event.model.product;
 
+import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 import org.ashina.ecommerce.sharedkernel.event.model.DomainEvent;
@@ -9,19 +10,18 @@ import java.util.List;
 
 @Getter
 @Setter
-public class OrderCreated extends DomainEvent {
+public class ProductReservedRequest extends DomainEvent {
 
-    @Getter
-    @Setter
+    @Data
     public static class Line {
         private String productId;
         private Integer quantity;
     }
 
-    private String orderId;
+    private String transactionId;
     private List<Line> lines = new ArrayList<>();
 
     public void addLine(Line line) {
-        lines.add(line);
+        this.lines.add(line);
     }
 }

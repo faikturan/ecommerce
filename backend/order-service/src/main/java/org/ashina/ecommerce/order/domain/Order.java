@@ -28,14 +28,10 @@ public class Order extends BaseEntity {
 
     private String customerId;
     private List<Line> lines = new ArrayList<>();
-    private OrderStatus status;
+    private Integer total;
     private String fullName;
     private String phoneNumber;
     private String address;
-
-    public Order(String id) {
-        super(id);
-    }
 
     public void addLine(Line line) {
         this.lines.add(line);
