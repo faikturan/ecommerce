@@ -1,4 +1,4 @@
-package org.ashina.ecommerce.payment.application.rest.dto;
+package org.ashina.ecommerce.order.infrastructure.ecommerce.feign.model;
 
 import lombok.Getter;
 import lombok.Setter;

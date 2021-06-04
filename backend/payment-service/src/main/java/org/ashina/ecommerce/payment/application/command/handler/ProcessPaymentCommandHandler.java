@@ -48,6 +48,7 @@ public class ProcessPaymentCommandHandler implements CommandHandler<ProcessPayme
     private Payment newPayment(ProcessPaymentCommand command) {
         Payment payment = new Payment();
         payment.setId(DomainEntityIdentifierGenerator.uuid());
+        payment.setCustomerId(command.getCustomerId());
         payment.setOrderId(command.getOrderId());
         payment.setAmount(command.getAmount());
         return payment;

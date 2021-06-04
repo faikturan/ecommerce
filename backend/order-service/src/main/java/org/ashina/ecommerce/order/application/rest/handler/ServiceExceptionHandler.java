@@ -1,7 +1,8 @@
 package org.ashina.ecommerce.order.application.rest.handler;
 
-import lombok.Data;
-import org.ashina.ecommerce.customer.application.error.ServiceException;
+import lombok.Getter;
+import lombok.Setter;
+import org.ashina.ecommerce.order.application.error.ServiceException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -9,7 +10,8 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 @ControllerAdvice
 public class ServiceExceptionHandler {
 
-    @Data
+    @Getter
+    @Setter
     public static class Response {
         private String errorCode;
         private String errorMessage;

@@ -7,7 +7,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
-@EnableFeignClients(basePackages = "org.ashina.ecommerce.cart.infrastructure.ecommerce.feign.client")
+@EnableFeignClients(basePackages = "org.ashina.ecommerce.order.infrastructure.ecommerce.feign.client")
 public class DefaultFeignConfiguration {
 
     @Bean

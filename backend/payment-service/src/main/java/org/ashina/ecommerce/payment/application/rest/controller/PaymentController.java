@@ -27,6 +27,7 @@ public class PaymentController {
 
     private ProcessPaymentCommand newProcessPaymentCommand(ProcessPaymentDto dto) {
         return ProcessPaymentCommand.builder()
+                .customerId(dto.getCustomerId())
                 .orderId(dto.getOrderId())
                 .amount(dto.getAmount())
                 .build();

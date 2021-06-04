@@ -1,7 +1,8 @@
 package org.ashina.ecommerce.customer.application.rest.handler;
 
 import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindException;
 import org.springframework.validation.FieldError;
@@ -15,10 +16,12 @@ import java.util.List;
 @ControllerAdvice
 public class ValidationExceptionHandler {
 
-    @Data
+    @Getter
+    @Setter
     public static class Response {
 
-        @Data
+        @Getter
+        @Setter
         @AllArgsConstructor
         public static class Error {
             private String field;

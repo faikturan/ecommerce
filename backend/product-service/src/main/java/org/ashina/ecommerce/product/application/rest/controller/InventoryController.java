@@ -43,10 +43,10 @@ public class InventoryController {
     }
 
     @PostMapping(value = "/api/v1/products", params = "action=reserve")
-    public ResponseEntity<Boolean> reserveProducts(@Valid @RequestBody ReserveProductsDto dto) {
+    public ResponseEntity<Void> reserveProducts(@Valid @RequestBody ReserveProductsDto dto) {
         ReserveProductsCommand command = newReserveProductsCommand(dto);
-        boolean isSuccess = (boolean) commandGateway.sendAndWait(command);
-        return new ResponseEntity<>(isSuccess, HttpStatus.OK);
+        commandGateway.send(command);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
     private ReserveProductsCommand newReserveProductsCommand(ReserveProductsDto dto) {

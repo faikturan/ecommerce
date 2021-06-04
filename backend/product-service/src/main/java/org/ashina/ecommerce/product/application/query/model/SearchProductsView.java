@@ -1,14 +1,17 @@
 package org.ashina.ecommerce.product.application.query.model;
 
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
-@Data
+@Getter
+@Setter
 public class SearchProductsView {
 
-    @Data
+    @Getter
+    @Setter
     public static class Product {
 
         private String id;

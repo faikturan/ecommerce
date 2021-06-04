@@ -32,6 +32,7 @@ public class Order extends BaseEntity {
     private String fullName;
     private String phoneNumber;
     private String address;
+    private OrderStatus status;
 
     public void addLine(Line line) {
         this.lines.add(line);

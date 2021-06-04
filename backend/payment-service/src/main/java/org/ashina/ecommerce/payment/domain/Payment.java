@@ -10,6 +10,8 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @Setter
 public class Payment extends BaseEntity {
 
+    private String customerId;
+
     private String orderId;
 
     private Integer amount;

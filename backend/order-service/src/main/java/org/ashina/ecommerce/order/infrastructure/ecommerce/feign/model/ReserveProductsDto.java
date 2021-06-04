@@ -1,4 +1,4 @@
-package org.ashina.ecommerce.product.application.rest.dto;
+package org.ashina.ecommerce.order.infrastructure.ecommerce.feign.model;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -11,7 +11,7 @@ import java.util.List;
 
 @Getter
 @Setter
-public class RefundProductsDto {
+public class ReserveProductsDto {
 
     @Getter
     @Setter
@@ -27,4 +27,8 @@ public class RefundProductsDto {
 
     @NotEmpty
     private List<Line> lines;
+
+    public void addLine(Line line) {
+        this.lines.add(line);
+    }
 }

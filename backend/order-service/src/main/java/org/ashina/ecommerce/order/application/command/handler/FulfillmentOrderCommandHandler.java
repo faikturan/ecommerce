@@ -1,19 +1,24 @@
 package org.ashina.ecommerce.order.application.command.handler;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.ashina.ecommerce.order.application.command.FulfillmentOrderCommand;
 import org.ashina.ecommerce.order.application.error.ErrorCode;
 import org.ashina.ecommerce.order.application.error.ServiceException;
-import org.ashina.ecommerce.order.domain.FulfillmentTransaction;
 import org.ashina.ecommerce.order.domain.Order;
+import org.ashina.ecommerce.order.domain.OrderStatus;
 import org.ashina.ecommerce.order.infrastructure.ecommerce.feign.client.CartClient;
+import org.ashina.ecommerce.order.infrastructure.ecommerce.feign.client.PaymentClient;
+import org.ashina.ecommerce.order.infrastructure.ecommerce.feign.client.ProductClient;
 import org.ashina.ecommerce.order.infrastructure.ecommerce.feign.model.GetCartDto;
-import org.ashina.ecommerce.order.infrastructure.event.publisher.ReserveProductPublisher;
-import org.ashina.ecommerce.order.infrastructure.persistence.repository.FulfillmentTransactionRepository;
+import org.ashina.ecommerce.order.infrastructure.ecommerce.feign.model.ProcessPaymentDto;
+import org.ashina.ecommerce.order.infrastructure.ecommerce.feign.model.RefundProductsDto;
+import org.ashina.ecommerce.order.infrastructure.ecommerce.feign.model.ReserveProductsDto;
+import org.ashina.ecommerce.order.infrastructure.event.publisher.OrderCompletedPublisher;
 import org.ashina.ecommerce.order.infrastructure.persistence.repository.OrderRepository;
 import org.ashina.ecommerce.sharedkernel.command.handler.CommandHandler;
 import org.ashina.ecommerce.sharedkernel.domain.DomainEntityIdentifierGenerator;
-import org.ashina.ecommerce.sharedkernel.event.model.product.ReserveProductRequested;
+import org.ashina.ecommerce.sharedkernel.event.model.order.OrderCompleted;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -22,12 +27,14 @@ import java.util.List;
 
 @Component
 @RequiredArgsConstructor
+@Slf4j
 public class FulfillmentOrderCommandHandler implements CommandHandler<FulfillmentOrderCommand, Void> {
 
-    private final CartClient cartClient;
     private final OrderRepository orderRepository;
-    private final FulfillmentTransactionRepository fulfillmentTransactionRepository;
-    private final ReserveProductPublisher reserveProductPublisher;
+    private final CartClient cartClient;
+    private final ProductClient productClient;
+    private final PaymentClient paymentClient;
+    private final OrderCompletedPublisher orderCompletedPublisher;
 
     @Override
     public Class<?> support() {
@@ -42,21 +49,43 @@ public class FulfillmentOrderCommandHandler implements CommandHandler<Fulfillmen
         validateAllProductsInStock(cart);
 
         // Create new order
-        Order order = newOrder(command, cart);
-        orderRepository.save(order);
+        Order order = createOrder(command, cart);
+        log.info("Created order #{}", order.getId());
 
-        // Create new order transaction
-        FulfillmentTransaction fulfillmentTransaction = newFulfillmentTransaction(order.getId());
-        fulfillmentTransactionRepository.save(fulfillmentTransaction);
+        // Reserve products
+        try {
+            reserveProducts(order.getLines());
+            log.info("[Fulfillment order #{}] Reserve products successful", order.getId());
+        } catch (Exception e) {
+            log.error("[Fulfillment order #{}] Reserve products failed: {}", order.getId(), e);
+            throw ServiceException.of(
+                    ErrorCode.ORDER_FULFILLMENT_RESERVE_PRODUCTS_FAILED,
+                    String.format("[Fulfillment order #%s] Reserve products failed", order.getId()),
+                    HttpStatus.INTERNAL_SERVER_ERROR
+            );
+        }
 
-        // Publish product reserved request
-        ReserveProductRequested reserveProductRequested = new ReserveProductRequested();
-        reserveProductPublisher.publish(reserveProductRequested);
+        // Process payment
+        try {
+            processPayment(order);
+            log.info("[Fulfillment order #{}] Process payment successful", order.getId());
+        } catch (Exception e) {
+            log.error("[Fulfillment order #{}] Process payment failed: {}", order.getId(), e);
+            rollbackReserveProducts(order.getLines());
+            throw ServiceException.of(
+                    ErrorCode.ORDER_FULFILLMENT_PROCESS_PAYMENT_FAILED,
+                    String.format("[Fulfillment order #%s] Process payment failed", order.getId()),
+                    HttpStatus.INTERNAL_SERVER_ERROR
+            );
+        }
+
+        // Complete order
+        completeOrder(order);
 
         return null;
     }
 
-    public void validateAllProductsInStock(GetCartDto cart) {
+    private void validateAllProductsInStock(GetCartDto cart) {
         for (GetCartDto.Line line : cart.getLines()) {
             if (line.getQuantity() <= 0) {
                 throw ServiceException.of(
@@ -66,6 +95,14 @@ public class FulfillmentOrderCommandHandler implements CommandHandler<Fulfillmen
                 );
             }
         }
+    }
+
+    // Create order
+    // -----------------------------------------------------------------------------------------------------------------
+
+    private Order createOrder(FulfillmentOrderCommand command, GetCartDto cart) {
+        Order order = newOrder(command, cart);
+        return orderRepository.save(order);
     }
 
     private Order newOrder(FulfillmentOrderCommand command, GetCartDto cart) {
@@ -85,26 +122,79 @@ public class FulfillmentOrderCommandHandler implements CommandHandler<Fulfillmen
         order.setFullName(command.getFullName());
         order.setPhoneNumber(command.getPhoneNumber());
         order.setAddress(command.getAddress());
+        order.setStatus(OrderStatus.CREATED);
         return order;
     }
 
-    private FulfillmentTransaction newFulfillmentTransaction(String orderId) {
-        FulfillmentTransaction transaction = new FulfillmentTransaction();
-        transaction.setId(DomainEntityIdentifierGenerator.uuid());
-        transaction.setOrderId(orderId);
-        transaction.setStatus(FulfillmentTransaction.Status.ORDER_CREATED);
-        return transaction;
+    // Reserve products
+    // -----------------------------------------------------------------------------------------------------------------
+
+    private void reserveProducts(List<Order.Line> cartLines) {
+        ReserveProductsDto dto = asReserveProductsDto(cartLines);
+        productClient.reserveProducts(dto);
     }
 
-    private ReserveProductRequested newProductReservedRequest(String transactionId, List<Order.Line> orderLines) {
-        ReserveProductRequested event = new ReserveProductRequested();
-        event.setTransactionId(transactionId);
+    private ReserveProductsDto asReserveProductsDto(List<Order.Line> orderLines) {
+        ReserveProductsDto dto = new ReserveProductsDto();
         orderLines.forEach(orderLine -> {
-            ReserveProductRequested.Line eventLine = new ReserveProductRequested.Line();
-            eventLine.setProductId(orderLine.getProductId());
-            eventLine.setQuantity(orderLine.getQuantity());
-            event.addLine(eventLine);
+            ReserveProductsDto.Line dtoLine = new ReserveProductsDto.Line();
+            dtoLine.setProductId(orderLine.getProductId());
+            dtoLine.setQuantity(orderLine.getQuantity());
+            dto.addLine(dtoLine);
         });
+        return dto;
+    }
+
+    private void rollbackReserveProducts(List<Order.Line> orderLines) {
+        RefundProductsDto dto = asRefundProductsDto(orderLines);
+        productClient.refundProducts(dto);
+    }
+
+    private RefundProductsDto asRefundProductsDto(List<Order.Line> orderLines) {
+        RefundProductsDto dto = new RefundProductsDto();
+        orderLines.forEach(orderLine -> {
+            RefundProductsDto.Line dtoLine = new RefundProductsDto.Line();
+            dtoLine.setProductId(orderLine.getProductId());
+            dtoLine.setQuantity(orderLine.getQuantity());
+            dto.addLine(dtoLine);
+        });
+        return dto;
+    }
+
+    // Process payment
+    // -----------------------------------------------------------------------------------------------------------------
+
+    private void processPayment(Order order) {
+        ProcessPaymentDto dto = asProcessPaymentDto(order);
+        paymentClient.processPayment(dto);
+
+        order.setStatus(OrderStatus.PAID);
+        orderRepository.save(order);
+    }
+
+    private ProcessPaymentDto asProcessPaymentDto(Order order) {
+        ProcessPaymentDto dto = new ProcessPaymentDto();
+        dto.setCustomerId(order.getCustomerId());
+        dto.setOrderId(order.getId());
+        dto.setAmount(order.getTotal());
+        return dto;
+    }
+
+    // Complete order
+    // -----------------------------------------------------------------------------------------------------------------
+
+    private void completeOrder(Order order) {
+        order.setStatus(OrderStatus.COMPLETED);
+        orderRepository.save(order);
+
+        OrderCompleted event = newOrderCompleted(order);
+        orderCompletedPublisher.publish(event);
+    }
+
+    private OrderCompleted newOrderCompleted(Order order) {
+        OrderCompleted event = new OrderCompleted();
+        event.setCustomerId(order.getCustomerId());
+        event.setOrderId(order.getId());
         return event;
     }
 }

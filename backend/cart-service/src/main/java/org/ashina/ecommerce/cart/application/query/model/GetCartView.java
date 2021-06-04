@@ -1,16 +1,19 @@
 package org.ashina.ecommerce.cart.application.query.model;
 
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 import org.ashina.ecommerce.cart.domain.Cart;
 import org.ashina.ecommerce.cart.infrastructure.ecommerce.feign.model.GetProductsDto;
 
 import java.util.ArrayList;
 import java.util.List;
 
-@Data
+@Getter
+@Setter
 public class GetCartView {
 
-    @Data
+    @Getter
+    @Setter
     public static class Line {
 
         private String productId;

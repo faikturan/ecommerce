@@ -5,10 +5,7 @@ public class ErrorCode {
     private ErrorCode() {
     }
 
-    public static final String PERMISSION = "permission";
-    public static final String CART_EMPTY = "cart.empty";
-    public static final String LINE_QUANTITY_INVALID = "line.quantity.invalid";
-    public static final String ORDER_NOT_FOUND = "order.not_found";
-    public static final String PRODUCT_NOT_FOUND = "product.not_found";
     public static final String PRODUCT_OUT_OF_STOCK = "product.out_of_stock";
+    public static final String ORDER_FULFILLMENT_RESERVE_PRODUCTS_FAILED = "order.fulfillment.reserve_products_failed";
+    public static final String ORDER_FULFILLMENT_PROCESS_PAYMENT_FAILED = "order.fulfillment.process_payment_failed";
 }

@@ -1,14 +1,17 @@
 package org.ashina.ecommerce.cart.application.rest.dto;
 
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.util.ArrayList;
 import java.util.List;
 
-@Data
+@Getter
+@Setter
 public class GetCartDto {
 
-    @Data
+    @Getter
+    @Setter
     public static class Line {
         private String productId;
         private String productName;

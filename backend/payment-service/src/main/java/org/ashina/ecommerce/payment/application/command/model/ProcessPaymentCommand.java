@@ -12,6 +12,9 @@ import javax.validation.constraints.Positive;
 public class ProcessPaymentCommand {
 
     @NotBlank
+    private final String customerId;
+
+    @NotBlank
     private final String orderId;
 
     @NotNull
