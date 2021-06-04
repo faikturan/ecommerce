@@ -1,8 +1,8 @@
 package org.ashina.ecommerce.payment.application.rest.controller;
 
 import lombok.RequiredArgsConstructor;
-import org.ashina.ecommerce.payment.application.command.model.CreatePaymentCommand;
-import org.ashina.ecommerce.payment.application.rest.dto.CreatePaymentDto;
+import org.ashina.ecommerce.payment.application.command.model.ProcessPaymentCommand;
+import org.ashina.ecommerce.payment.application.rest.dto.ProcessPaymentDto;
 import org.ashina.ecommerce.sharedkernel.command.gateway.CommandGateway;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,14 +19,14 @@ public class PaymentController {
     private final CommandGateway commandGateway;
 
     @GetMapping("/api/v1/payments")
-    public ResponseEntity<Void> createPaymentDto(@Valid @RequestBody CreatePaymentDto dto) {
-        CreatePaymentCommand command = newCreatePaymentCommand(dto);
+    public ResponseEntity<Void> processPayment(@Valid @RequestBody ProcessPaymentDto dto) {
+        ProcessPaymentCommand command = newProcessPaymentCommand(dto);
         commandGateway.send(command);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
-    private CreatePaymentCommand newCreatePaymentCommand(CreatePaymentDto dto) {
-        return CreatePaymentCommand.builder()
+    private ProcessPaymentCommand newProcessPaymentCommand(ProcessPaymentDto dto) {
+        return ProcessPaymentCommand.builder()
                 .orderId(dto.getOrderId())
                 .amount(dto.getAmount())
                 .build();

@@ -4,14 +4,12 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.ashina.ecommerce.product.application.command.model.CreateProductCommand;
 import org.ashina.ecommerce.product.application.command.model.DeleteProductCommand;
-import org.ashina.ecommerce.product.application.command.model.PurchaseProductCommand;
 import org.ashina.ecommerce.product.application.query.model.GetProductsQuery;
 import org.ashina.ecommerce.product.application.query.model.GetProductsView;
 import org.ashina.ecommerce.product.application.query.model.SearchProductsQuery;
 import org.ashina.ecommerce.product.application.query.model.SearchProductsView;
 import org.ashina.ecommerce.product.application.rest.dto.CreateProductDto;
 import org.ashina.ecommerce.product.application.rest.dto.GetProductsDto;
-import org.ashina.ecommerce.product.application.rest.dto.PurchaseProductDto;
 import org.ashina.ecommerce.product.application.rest.dto.SearchProductsDto;
 import org.ashina.ecommerce.product.application.rest.mapper.GetProductsMapper;
 import org.ashina.ecommerce.product.application.rest.mapper.SearchProductsMapper;
@@ -84,20 +82,6 @@ public class ProductController {
                 .image(dto.getImage())
                 .price(dto.getPrice())
                 .attributes(dto.getAttributes())
-                .build();
-    }
-
-    @PostMapping(value = "/api/v1/products", params = "action=purchase")
-    public ResponseEntity<Void> purchaseProduct(@Valid @RequestBody PurchaseProductDto dto) {
-        PurchaseProductCommand command = newPurchaseProductCommand(dto);
-        commandGateway.send(command);
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-    }
-
-    private PurchaseProductCommand newPurchaseProductCommand(PurchaseProductDto dto) {
-        return PurchaseProductCommand.builder()
-                .productId(dto.getProductId())
-                .quantity(dto.getQuantity())
                 .build();
     }
 

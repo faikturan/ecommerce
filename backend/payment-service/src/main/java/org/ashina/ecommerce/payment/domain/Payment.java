@@ -3,12 +3,9 @@ package org.ashina.ecommerce.payment.domain;
 import lombok.Getter;
 import lombok.Setter;
 import org.ashina.ecommerce.payment.infrastructure.persistence.entity.BaseEntity;
+import org.springframework.data.mongodb.core.mapping.Document;
 
-import javax.persistence.Entity;
-import javax.persistence.Table;
-
-@Entity
-@Table(name = "payments")
+@Document(collection = "payments")
 @Getter
 @Setter
 public class Payment extends BaseEntity {

@@ -1,12 +1,12 @@
 package org.ashina.ecommerce.product.infrastructure.persistence.repository.custom;
 
-import com.mongodb.bulk.BulkWriteResult;
-
-import java.util.Map;
+import com.mongodb.client.result.UpdateResult;
 
 public interface CustomProductRepository {
 
-    void changeQuantity(String productId, int difference, boolean isIncrement);
+    UpdateResult purchaseProduct(String productId, int quantity);
 
-    BulkWriteResult changeQuantity(Map<String, Integer> productIdAndIncrementMap);
+    UpdateResult reserveProduct(String productId, int quantity);
+
+    UpdateResult refundProduct(String productId, int quantity);
 }
