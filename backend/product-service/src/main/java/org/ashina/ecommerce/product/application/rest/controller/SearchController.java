@@ -6,7 +6,6 @@ import org.ashina.ecommerce.product.application.query.model.SearchProductsQuery;
 import org.ashina.ecommerce.product.application.query.model.SearchProductsView;
 import org.ashina.ecommerce.product.application.rest.dto.SearchProductsDto;
 import org.ashina.ecommerce.product.application.rest.mapper.SearchProductsMapper;
-import org.ashina.ecommerce.sharedkernel.command.gateway.DefaultCommandGateway;
 import org.ashina.ecommerce.sharedkernel.query.gateway.QueryGateway;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,10 +18,9 @@ import org.springframework.web.bind.annotation.RestController;
 @Slf4j
 public class SearchController {
 
-    private final DefaultCommandGateway commandGateway;
     private final QueryGateway queryGateway;
 
-    @GetMapping(value = "/api/v1/products", params = "action=search")
+    @GetMapping("/api/v1/search")
     public ResponseEntity<SearchProductsDto> searchProducts(@RequestParam(required = false) String keyword,
                                                             @RequestParam(required = false, defaultValue = "0") int page,
                                                             @RequestParam(required = false, defaultValue = "20") int size) {

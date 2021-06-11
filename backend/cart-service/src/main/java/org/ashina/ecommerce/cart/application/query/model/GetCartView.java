@@ -32,7 +32,7 @@ public class GetCartView {
     }
 
     private List<Line> lines = new ArrayList<>();
-    private Integer total;
+    private Integer total = 0;
 
     public void addLine(Line line) {
         this.lines.add(line);

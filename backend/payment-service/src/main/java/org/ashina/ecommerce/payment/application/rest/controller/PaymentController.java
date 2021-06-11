@@ -6,7 +6,7 @@ import org.ashina.ecommerce.payment.application.rest.dto.ProcessPaymentDto;
 import org.ashina.ecommerce.sharedkernel.command.gateway.CommandGateway;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -18,7 +18,7 @@ public class PaymentController {
 
     private final CommandGateway commandGateway;
 
-    @GetMapping("/api/v1/payments")
+    @PostMapping("/api/v1/payments")
     public ResponseEntity<Void> processPayment(@Valid @RequestBody ProcessPaymentDto dto) {
         ProcessPaymentCommand command = newProcessPaymentCommand(dto);
         commandGateway.send(command);

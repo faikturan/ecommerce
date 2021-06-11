@@ -15,5 +15,4 @@ public class DomainEvent {
         this.eventId = UUID.randomUUID().toString();
         this.createdAt = LocalDateTime.now();
     }
-
 }

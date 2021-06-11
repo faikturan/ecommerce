@@ -9,7 +9,6 @@ import org.ashina.ecommerce.product.application.rest.dto.PurchaseProductDto;
 import org.ashina.ecommerce.product.application.rest.dto.RefundProductsDto;
 import org.ashina.ecommerce.product.application.rest.dto.ReserveProductsDto;
 import org.ashina.ecommerce.sharedkernel.command.gateway.DefaultCommandGateway;
-import org.ashina.ecommerce.sharedkernel.query.gateway.QueryGateway;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -26,9 +25,8 @@ import java.util.List;
 public class InventoryController {
 
     private final DefaultCommandGateway commandGateway;
-    private final QueryGateway queryGateway;
 
-    @PostMapping(value = "/api/v1/products", params = "action=purchase")
+    @PostMapping(value = "/api/v1/inventory", params = "action=purchase")
     public ResponseEntity<Void> purchaseProduct(@Valid @RequestBody PurchaseProductDto dto) {
         PurchaseProductCommand command = newPurchaseProductCommand(dto);
         commandGateway.send(command);
@@ -42,7 +40,7 @@ public class InventoryController {
                 .build();
     }
 
-    @PostMapping(value = "/api/v1/products", params = "action=reserve")
+    @PostMapping(value = "/api/v1/inventory", params = "action=reserve")
     public ResponseEntity<Void> reserveProducts(@Valid @RequestBody ReserveProductsDto dto) {
         ReserveProductsCommand command = newReserveProductsCommand(dto);
         commandGateway.send(command);
@@ -63,8 +61,8 @@ public class InventoryController {
                 .build();
     }
 
-    @PostMapping(value = "/api/v1/products", params = "action=refund")
-    public ResponseEntity<Boolean> reserveProducts(@Valid @RequestBody RefundProductsDto dto) {
+    @PostMapping(value = "/api/v1/inventory", params = "action=refund")
+    public ResponseEntity<Boolean> refundProduct(@Valid @RequestBody RefundProductsDto dto) {
         RefundProductsCommand command = newRefundProductsCommand(dto);
         commandGateway.send(command);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);

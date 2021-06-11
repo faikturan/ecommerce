@@ -10,7 +10,6 @@ import org.ashina.ecommerce.cart.infrastructure.persistence.repository.CartRepos
 import org.ashina.ecommerce.sharedkernel.command.handler.CommandHandler;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Transactional;
 
 @Component
 @RequiredArgsConstructor
@@ -24,7 +23,6 @@ public class DeleteCartLineCommandHandler implements CommandHandler<DeleteCartLi
     }
 
     @Override
-    @Transactional
     public Void handle(DeleteCartLineCommand command) {
         // Get cart
         Cart cart = cartRepository.findByCustomerId(command.getCustomerId())

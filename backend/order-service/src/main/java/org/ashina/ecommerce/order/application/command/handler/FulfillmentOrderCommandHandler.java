@@ -21,7 +21,7 @@ import org.ashina.ecommerce.sharedkernel.domain.DomainEntityIdentifierGenerator;
 import org.ashina.ecommerce.sharedkernel.event.model.order.OrderCompleted;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.CollectionUtils;
 
 import java.util.List;
 
@@ -42,11 +42,10 @@ public class FulfillmentOrderCommandHandler implements CommandHandler<Fulfillmen
     }
 
     @Override
-    @Transactional
     public Void handle(FulfillmentOrderCommand command) {
         // Get cart and validate all products in stock
         GetCartDto cart = cartClient.getCart();
-        validateAllProductsInStock(cart);
+        validateCart(cart);
 
         // Create new order
         Order order = createOrder(command, cart);
@@ -57,7 +56,7 @@ public class FulfillmentOrderCommandHandler implements CommandHandler<Fulfillmen
             reserveProducts(order.getLines());
             log.info("[Fulfillment order #{}] Reserve products successful", order.getId());
         } catch (Exception e) {
-            log.error("[Fulfillment order #{}] Reserve products failed: {}", order.getId(), e);
+            log.error("[Fulfillment order #{}] Reserve products failed", order.getId());
             throw ServiceException.of(
                     ErrorCode.ORDER_FULFILLMENT_RESERVE_PRODUCTS_FAILED,
                     String.format("[Fulfillment order #%s] Reserve products failed", order.getId()),
@@ -70,7 +69,7 @@ public class FulfillmentOrderCommandHandler implements CommandHandler<Fulfillmen
             processPayment(order);
             log.info("[Fulfillment order #{}] Process payment successful", order.getId());
         } catch (Exception e) {
-            log.error("[Fulfillment order #{}] Process payment failed: {}", order.getId(), e);
+            log.error("[Fulfillment order #{}] Process payment failed", order.getId());
             rollbackReserveProducts(order.getLines());
             throw ServiceException.of(
                     ErrorCode.ORDER_FULFILLMENT_PROCESS_PAYMENT_FAILED,
@@ -85,7 +84,15 @@ public class FulfillmentOrderCommandHandler implements CommandHandler<Fulfillmen
         return null;
     }
 
-    private void validateAllProductsInStock(GetCartDto cart) {
+    private void validateCart(GetCartDto cart) {
+        if (CollectionUtils.isEmpty(cart.getLines())) {
+            throw ServiceException.of(
+                    ErrorCode.CART_EMPTY,
+                    "Cart is empty",
+                    HttpStatus.BAD_REQUEST
+            );
+        }
+
         for (GetCartDto.Line line : cart.getLines()) {
             if (line.getQuantity() <= 0) {
                 throw ServiceException.of(

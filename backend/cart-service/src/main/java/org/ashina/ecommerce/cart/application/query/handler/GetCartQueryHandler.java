@@ -15,6 +15,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Component
@@ -34,12 +35,11 @@ public class GetCartQueryHandler implements QueryHandler<GetCartQuery, GetCartVi
         GetCartView view = new GetCartView();
 
         // Get cart lines
-        Cart cart = cartRepository.findByCustomerId(query.getCustomerId())
-                .orElseThrow(() -> ServiceException.of(
-                   ErrorCode.CART_NOT_FOUND,
-                   String.format("Cart of customer %s not found", query.getCustomerId()),
-                   HttpStatus.NOT_FOUND
-                ));
+        Optional<Cart> cartOpt = cartRepository.findByCustomerId(query.getCustomerId());
+        if (!cartOpt.isPresent()) {
+            return view;
+        }
+        Cart cart = cartOpt.get();
         if (CollectionUtils.isEmpty(cart.getLines())) {
             return view;
         }

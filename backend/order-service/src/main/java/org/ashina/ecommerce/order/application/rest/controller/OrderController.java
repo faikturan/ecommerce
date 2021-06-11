@@ -21,7 +21,7 @@ public class OrderController {
 
     private final DefaultCommandGateway commandGateway;
 
-    @PostMapping("/api/v1/orders")
+    @PostMapping(value = "/api/v1/orders", params = "action=fulfillment")
     public ResponseEntity<Void> fulfillmentOrder(@Valid @RequestBody FulfillmentOrderDto dto,
                                                  @AuthenticationPrincipal Jwt jwt) {
         FulfillmentOrderCommand command = newFulfillmentOrderCommand(dto, jwt);

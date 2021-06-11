@@ -9,7 +9,6 @@ import org.ashina.ecommerce.cart.infrastructure.persistence.repository.CartRepos
 import org.ashina.ecommerce.sharedkernel.command.handler.CommandHandler;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Transactional;
 
 @Component
 @RequiredArgsConstructor
@@ -23,7 +22,6 @@ public class UpdateCartLineCommandHandler implements CommandHandler<UpdateCartLi
     }
 
     @Override
-    @Transactional
     public Void handle(UpdateCartLineCommand command) {
         // Get cart
         Cart cart = cartRepository.findByCustomerId(command.getCustomerId())

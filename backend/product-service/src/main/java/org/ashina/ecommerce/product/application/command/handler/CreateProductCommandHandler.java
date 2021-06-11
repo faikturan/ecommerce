@@ -8,7 +8,6 @@ import org.ashina.ecommerce.product.infrastructure.search.SearchService;
 import org.ashina.ecommerce.sharedkernel.command.handler.CommandHandler;
 import org.ashina.ecommerce.sharedkernel.domain.DomainEntityIdentifierGenerator;
 import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Transactional;
 
 @Component
 @RequiredArgsConstructor
@@ -23,7 +22,6 @@ public class CreateProductCommandHandler implements CommandHandler<CreateProduct
     }
 
     @Override
-    @Transactional
     public Void handle(CreateProductCommand command) {
         // Create product
         Product product = newProduct(command);
@@ -43,6 +41,7 @@ public class CreateProductCommandHandler implements CommandHandler<CreateProduct
         product.setDescription(command.getDescription());
         product.setImage(command.getImage());
         product.setPrice(command.getPrice());
+        product.setQuantity(0);
         return product;
     }
 }

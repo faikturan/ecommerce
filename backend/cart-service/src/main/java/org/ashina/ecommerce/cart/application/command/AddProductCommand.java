@@ -8,7 +8,7 @@ import javax.validation.constraints.NotNull;
 
 @Getter
 @Builder
-public class AddProductToCartCommand {
+public class AddProductCommand {
 
     @NotBlank
     private final String customerId;

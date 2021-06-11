@@ -8,7 +8,6 @@ import org.ashina.ecommerce.payment.infrastructure.persistence.repository.Paymen
 import org.ashina.ecommerce.sharedkernel.command.handler.CommandHandler;
 import org.ashina.ecommerce.sharedkernel.domain.DomainEntityIdentifierGenerator;
 import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Transactional;
 
 @Component
 @RequiredArgsConstructor
@@ -23,7 +22,6 @@ public class ProcessPaymentCommandHandler implements CommandHandler<ProcessPayme
     }
 
     @Override
-    @Transactional
     public Void handle(ProcessPaymentCommand command) {
         // Simulate processing payment
         processPayment(command);

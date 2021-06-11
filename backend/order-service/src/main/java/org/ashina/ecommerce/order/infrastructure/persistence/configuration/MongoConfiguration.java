@@ -10,7 +10,7 @@ import java.time.LocalDateTime;
 import java.util.Optional;
 
 @Configuration
-@EnableMongoRepositories(basePackages = "org.ashina.ecommerce.order.infrastructure.persistence.jpa")
+@EnableMongoRepositories(basePackages = "org.ashina.ecommerce.order.infrastructure.persistence.repository")
 @EnableMongoAuditing(dateTimeProviderRef = "dateTimeProvider")
 public class MongoConfiguration {
 

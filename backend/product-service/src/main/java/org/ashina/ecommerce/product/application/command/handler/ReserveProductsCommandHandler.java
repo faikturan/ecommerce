@@ -10,7 +10,6 @@ import org.ashina.ecommerce.product.infrastructure.persistence.repository.Produc
 import org.ashina.ecommerce.sharedkernel.command.handler.CommandHandler;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -28,22 +27,22 @@ public class ReserveProductsCommandHandler implements CommandHandler<ReserveProd
     }
 
     @Override
-    @Transactional
     public Void handle(ReserveProductsCommand command) {
         Map<String, Integer> reservedProducts = new HashMap<>();
         for (ReserveProductsCommand.Line line : command.getLines()) {
             UpdateResult updateResult = productRepository.reserveProduct(line.getProductId(), line.getQuantity());
-            log.debug("Reserve {}/{} items of product {}",
-                    updateResult.getModifiedCount(), line.getQuantity(), line.getProductId());
             if (updateResult.getModifiedCount() == 0) {
                 log.warn("Product {} is out of stock", line.getProductId());
-                refundProducts(reservedProducts);
+                if (!reservedProducts.isEmpty()) {
+                    refundProducts(reservedProducts);
+                }
                 throw ServiceException.of(
                         ErrorCode.PRODUCT_OUT_OF_STOCK,
                         String.format("Product %s is out of stock", line.getProductId()),
                         HttpStatus.INTERNAL_SERVER_ERROR
                 );
             } else {
+                log.debug("Reserve {} items of product {} done", line.getQuantity(), line.getProductId());
                 reservedProducts.put(line.getProductId(), line.getQuantity());
             }
         }

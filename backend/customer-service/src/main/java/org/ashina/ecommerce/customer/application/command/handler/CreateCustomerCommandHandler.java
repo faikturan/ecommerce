@@ -11,7 +11,6 @@ import org.ashina.ecommerce.sharedkernel.command.handler.CommandHandler;
 import org.ashina.ecommerce.sharedkernel.domain.DomainEntityIdentifierGenerator;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
@@ -28,7 +27,6 @@ public class CreateCustomerCommandHandler implements CommandHandler<CreateCustom
     }
 
     @Override
-    @Transactional
     public Void handle(CreateCustomerCommand command) {
         // Validate email not registered
         Optional<Customer> customerOpt = customerRepository.findByEmail(command.getEmail());
@@ -45,7 +43,13 @@ public class CreateCustomerCommandHandler implements CommandHandler<CreateCustom
         customerRepository.save(customer);
 
         // Create account
-        uaaService.createAccount(customer, command.getPassword());
+        try {
+            uaaService.createAccount(customer, command.getPassword());
+        } catch (Exception e) {
+            // Rollback
+            customerRepository.delete(customer);
+            throw e;
+        }
 
         return null;
     }

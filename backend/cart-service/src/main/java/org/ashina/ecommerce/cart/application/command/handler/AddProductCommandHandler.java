@@ -1,7 +1,7 @@
 package org.ashina.ecommerce.cart.application.command.handler;
 
 import lombok.RequiredArgsConstructor;
-import org.ashina.ecommerce.cart.application.command.AddProductToCartCommand;
+import org.ashina.ecommerce.cart.application.command.AddProductCommand;
 import org.ashina.ecommerce.cart.application.error.ErrorCode;
 import org.ashina.ecommerce.cart.application.error.ServiceException;
 import org.ashina.ecommerce.cart.domain.Cart;
@@ -10,24 +10,22 @@ import org.ashina.ecommerce.sharedkernel.command.handler.CommandHandler;
 import org.ashina.ecommerce.sharedkernel.domain.DomainEntityIdentifierGenerator;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
 @Component
 @RequiredArgsConstructor
-public class AddProductToCartCommandHandler implements CommandHandler<AddProductToCartCommand, Void> {
+public class AddProductCommandHandler implements CommandHandler<AddProductCommand, Void> {
 
     private final CartRepository cartRepository;
 
     @Override
     public Class<?> support() {
-        return AddProductToCartCommand.class;
+        return AddProductCommand.class;
     }
 
     @Override
-    @Transactional
-    public Void handle(AddProductToCartCommand command) {
+    public Void handle(AddProductCommand command) {
         // Get cart
         Cart cart = cartRepository.findByCustomerId(command.getCustomerId())
                 .orElseGet(() -> {

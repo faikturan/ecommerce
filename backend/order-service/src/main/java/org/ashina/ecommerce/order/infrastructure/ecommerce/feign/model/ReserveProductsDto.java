@@ -7,6 +7,7 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
+import java.util.ArrayList;
 import java.util.List;
 
 @Getter
@@ -26,7 +27,7 @@ public class ReserveProductsDto {
     }
 
     @NotEmpty
-    private List<Line> lines;
+    private List<Line> lines = new ArrayList<>();
 
     public void addLine(Line line) {
         this.lines.add(line);

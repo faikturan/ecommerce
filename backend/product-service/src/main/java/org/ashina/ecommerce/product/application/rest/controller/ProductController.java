@@ -6,13 +6,9 @@ import org.ashina.ecommerce.product.application.command.model.CreateProductComma
 import org.ashina.ecommerce.product.application.command.model.DeleteProductCommand;
 import org.ashina.ecommerce.product.application.query.model.GetProductsQuery;
 import org.ashina.ecommerce.product.application.query.model.GetProductsView;
-import org.ashina.ecommerce.product.application.query.model.SearchProductsQuery;
-import org.ashina.ecommerce.product.application.query.model.SearchProductsView;
 import org.ashina.ecommerce.product.application.rest.dto.CreateProductDto;
 import org.ashina.ecommerce.product.application.rest.dto.GetProductsDto;
-import org.ashina.ecommerce.product.application.rest.dto.SearchProductsDto;
 import org.ashina.ecommerce.product.application.rest.mapper.GetProductsMapper;
-import org.ashina.ecommerce.product.application.rest.mapper.SearchProductsMapper;
 import org.ashina.ecommerce.sharedkernel.command.gateway.DefaultCommandGateway;
 import org.ashina.ecommerce.sharedkernel.query.gateway.QueryGateway;
 import org.springframework.http.HttpStatus;
@@ -36,7 +32,7 @@ public class ProductController {
     private final DefaultCommandGateway commandGateway;
     private final QueryGateway queryGateway;
 
-    @GetMapping(value = "/api/v1/products", params = "action=get")
+    @GetMapping("/api/v1/products")
     public ResponseEntity<GetProductsDto> getProducts(@RequestParam Collection<String> ids) {
         GetProductsQuery query = newGetProductsQuery(ids);
         GetProductsView view = (GetProductsView) queryGateway.execute(query, true);
@@ -50,25 +46,7 @@ public class ProductController {
                 .build();
     }
 
-    @GetMapping(value = "/api/v1/products", params = "action=search")
-    public ResponseEntity<SearchProductsDto> searchProducts(@RequestParam(required = false) String keyword,
-                                                            @RequestParam(required = false, defaultValue = "0") int page,
-                                                            @RequestParam(required = false, defaultValue = "20") int size) {
-        SearchProductsQuery query = newSearchProductsQuery(keyword, page, size);
-        SearchProductsView view = (SearchProductsView) queryGateway.execute(query, true);
-        SearchProductsDto dto = SearchProductsMapper.INSTANCE.map(view);
-        return new ResponseEntity<>(dto, HttpStatus.OK);
-    }
-
-    private SearchProductsQuery newSearchProductsQuery(String keyword, int page, int size) {
-        return SearchProductsQuery.builder()
-                .keyword(keyword)
-                .page(page)
-                .size(size)
-                .build();
-    }
-
-    @PostMapping(value = "/api/v1/products", params = "action=create")
+    @PostMapping("/api/v1/products")
     public ResponseEntity<Void> createProduct(@Valid @RequestBody CreateProductDto dto) {
         CreateProductCommand command = newCreateProductCommand(dto);
         commandGateway.send(command);
@@ -85,7 +63,7 @@ public class ProductController {
                 .build();
     }
 
-    @DeleteMapping(value = "/api/v1/products/{productId}")
+    @DeleteMapping("/api/v1/products/{productId}")
     public ResponseEntity<Void> deleteProduct(@PathVariable String productId) {
         DeleteProductCommand command = newDeleteProductCommand(productId);
         commandGateway.send(command);
