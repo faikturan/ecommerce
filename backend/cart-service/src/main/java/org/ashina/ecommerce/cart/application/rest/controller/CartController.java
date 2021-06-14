@@ -36,6 +36,9 @@ public class CartController {
 
     @GetMapping("/api/v1/carts")
     public ResponseEntity<GetCartDto> getCart(@AuthenticationPrincipal Jwt jwt) {
+        if (true) {
+            throw new RuntimeException("aaaa");
+        }
         GetCartQuery query = newGetCartQuery(jwt);
         GetCartView view = (GetCartView) queryGateway.execute(query);
         GetCartDto dto = GetCartMapper.INSTANCE.map(view);

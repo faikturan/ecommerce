@@ -21,5 +21,5 @@ public class GetCartDto {
     }
 
     private List<Line> lines = new ArrayList<>();
-    private Integer total;
+    private Integer total = 0;
 }

@@ -20,6 +20,6 @@ public class GetCartDto {
         private Integer quantity;
     }
 
-    private List<Line> lines = new ArrayList<>();
+    private List<Line> lines;
     private Integer total;
 }
