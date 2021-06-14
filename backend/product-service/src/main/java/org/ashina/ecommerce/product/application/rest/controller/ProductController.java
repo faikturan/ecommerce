@@ -34,6 +34,9 @@ public class ProductController {
 
     @GetMapping("/api/v1/products")
     public ResponseEntity<GetProductsDto> getProducts(@RequestParam Collection<String> ids) {
+        if (true) {
+            throw new RuntimeException("aaaa");
+        }
         GetProductsQuery query = newGetProductsQuery(ids);
         GetProductsView view = (GetProductsView) queryGateway.execute(query, true);
         GetProductsDto dto = GetProductsMapper.INSTANCE.map(view);

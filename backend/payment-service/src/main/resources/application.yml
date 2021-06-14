@@ -1,9 +1,0 @@
-server:
-  port: 8005
-
-logging:
-  level:
-    org.springframework.web.filter.CommonsRequestLoggingFilter: DEBUG
-    org.springframework.data.mongodb.core.MongoTemplate: DEBUG
-    com.netflix.discovery.shared.resolver.aws.ConfigClusterResolver: WARN
-    org.ashina.ecommerce: DEBUG

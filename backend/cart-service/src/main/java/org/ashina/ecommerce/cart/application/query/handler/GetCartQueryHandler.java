@@ -50,6 +50,9 @@ public class GetCartQueryHandler implements QueryHandler<GetCartQuery, GetCartVi
                 .map(Cart.Line::getProductId)
                 .collect(Collectors.toList());
         GetProductsDto getProductsDto = productClient.getProducts(productIds);
+        if (CollectionUtils.isEmpty(getProductsDto.getProducts())) {
+            return view;
+        }
 
         // Process each cart line
         int total = 0;

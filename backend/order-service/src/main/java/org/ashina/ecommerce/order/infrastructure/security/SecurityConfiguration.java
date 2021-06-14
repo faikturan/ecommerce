@@ -20,9 +20,6 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     }
 
     private Customizer<ExpressionUrlAuthorizationConfigurer<HttpSecurity>.ExpressionInterceptUrlRegistry> authorizeRequests() {
-        return authorize -> authorize
-//                .antMatchers( "/actuator/**").permitAll()
-//                .antMatchers( "/webjars/**", "/favicon.ico", "/hystrix/**", "/hystrix.stream", "/proxy.stream/**").permitAll()
-                .anyRequest().permitAll();
+        return authorize -> authorize.anyRequest().permitAll();
     }
 }
