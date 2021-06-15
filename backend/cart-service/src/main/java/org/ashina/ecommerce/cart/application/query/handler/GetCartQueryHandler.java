@@ -1,6 +1,8 @@
 package org.ashina.ecommerce.cart.application.query.handler;
 
+import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.ashina.ecommerce.cart.application.error.ErrorCode;
 import org.ashina.ecommerce.cart.application.error.ServiceException;
 import org.ashina.ecommerce.cart.application.query.model.GetCartQuery;
@@ -20,6 +22,7 @@ import java.util.stream.Collectors;
 
 @Component
 @RequiredArgsConstructor
+@Slf4j
 public class GetCartQueryHandler implements QueryHandler<GetCartQuery, GetCartView> {
 
     private final CartRepository cartRepository;
@@ -31,6 +34,7 @@ public class GetCartQueryHandler implements QueryHandler<GetCartQuery, GetCartVi
     }
 
     @Override
+    @CircuitBreaker(name = "mainService", fallbackMethod="handleFallback")
     public GetCartView handle(GetCartQuery query) {
         GetCartView view = new GetCartView();
 
@@ -73,4 +77,8 @@ public class GetCartQueryHandler implements QueryHandler<GetCartQuery, GetCartVi
         return view;
     }
 
+    public GetCartView handleFallback(Exception e) {
+        log.error("Get cart failed", e);
+        return new GetCartView();
+    }
 }
