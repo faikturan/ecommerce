@@ -8,7 +8,6 @@ import org.ashina.ecommerce.customer.domain.Customer;
 import org.ashina.ecommerce.customer.infrastructure.persistence.repository.CustomerRepository;
 import org.ashina.ecommerce.customer.infrastructure.uaa.UaaService;
 import org.ashina.ecommerce.sharedkernel.command.handler.CommandHandler;
-import org.ashina.ecommerce.sharedkernel.domain.DomainEntityIdentifierGenerator;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 
@@ -56,7 +55,6 @@ public class CreateCustomerCommandHandler implements CommandHandler<CreateCustom
 
     private Customer newCustomer(CreateCustomerCommand command) {
         Customer customer = new Customer();
-        customer.setId(DomainEntityIdentifierGenerator.uuid());
         customer.setLastName(command.getLastName());
         customer.setFirstName(command.getFirstName());
         customer.setEmail(command.getEmail());

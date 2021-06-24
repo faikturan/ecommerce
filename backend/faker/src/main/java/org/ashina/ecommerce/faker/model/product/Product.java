@@ -1,11 +1,9 @@
-package org.ashina.ecommerce.product.domain;
+package org.ashina.ecommerce.faker.model.product;
 
 import lombok.Getter;
 import lombok.Setter;
-import org.ashina.ecommerce.product.infrastructure.persistence.entity.BaseEntity;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import java.util.HashMap;
 import java.util.Map;
 
 @Document(collection = "products")

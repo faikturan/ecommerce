@@ -7,7 +7,6 @@ import org.ashina.ecommerce.cart.application.error.ServiceException;
 import org.ashina.ecommerce.cart.domain.Cart;
 import org.ashina.ecommerce.cart.infrastructure.persistence.repository.CartRepository;
 import org.ashina.ecommerce.sharedkernel.command.handler.CommandHandler;
-import org.ashina.ecommerce.sharedkernel.domain.DomainEntityIdentifierGenerator;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 
@@ -30,7 +29,7 @@ public class AddProductCommandHandler implements CommandHandler<AddProductComman
         Cart cart = cartRepository.findByCustomerId(command.getCustomerId())
                 .orElseGet(() -> {
                     // Create new cart if not exist
-                    Cart newCart = new Cart(DomainEntityIdentifierGenerator.uuid());
+                    Cart newCart = new Cart();
                     newCart.setCustomerId(command.getCustomerId());
                     return newCart;
                 });

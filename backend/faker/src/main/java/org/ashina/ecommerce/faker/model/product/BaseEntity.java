@@ -1,4 +1,4 @@
-package org.ashina.ecommerce.order.infrastructure.persistence.entity;
+package org.ashina.ecommerce.faker.model.product;
 
 import lombok.Getter;
 import lombok.Setter;

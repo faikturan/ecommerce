@@ -17,7 +17,6 @@ import org.ashina.ecommerce.order.infrastructure.ecommerce.feign.model.ReservePr
 import org.ashina.ecommerce.order.infrastructure.event.publisher.OrderCompletedPublisher;
 import org.ashina.ecommerce.order.infrastructure.persistence.repository.OrderRepository;
 import org.ashina.ecommerce.sharedkernel.command.handler.CommandHandler;
-import org.ashina.ecommerce.sharedkernel.domain.DomainEntityIdentifierGenerator;
 import org.ashina.ecommerce.sharedkernel.event.model.order.OrderCompleted;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
@@ -114,7 +113,6 @@ public class FulfillmentOrderCommandHandler implements CommandHandler<Fulfillmen
 
     private Order newOrder(FulfillmentOrderCommand command, GetCartDto cart) {
         Order order = new Order();
-        order.setId(DomainEntityIdentifierGenerator.uuid());
         order.setCustomerId(command.getCustomerId());
         cart.getLines().forEach(cartLine -> {
             Order.Line orderLine = newOrderLine(cartLine);

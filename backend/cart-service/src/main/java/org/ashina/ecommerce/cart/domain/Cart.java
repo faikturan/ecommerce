@@ -26,10 +26,6 @@ public class Cart extends BaseEntity {
     private String customerId;
     private List<Line> lines = new ArrayList<>();
 
-    public Cart(String id) {
-        super(id);
-    }
-
     public void addLine(Line line) {
         this.lines.add(line);
     }

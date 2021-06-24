@@ -6,7 +6,6 @@ import org.ashina.ecommerce.product.domain.Product;
 import org.ashina.ecommerce.product.infrastructure.persistence.repository.ProductRepository;
 import org.ashina.ecommerce.product.infrastructure.search.SearchService;
 import org.ashina.ecommerce.sharedkernel.command.handler.CommandHandler;
-import org.ashina.ecommerce.sharedkernel.domain.DomainEntityIdentifierGenerator;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -36,7 +35,7 @@ public class CreateProductCommandHandler implements CommandHandler<CreateProduct
     }
 
     private Product newProduct(CreateProductCommand command) {
-        Product product = new Product(DomainEntityIdentifierGenerator.uuid());
+        Product product = new Product();
         product.setName(command.getName());
         product.setDescription(command.getDescription());
         product.setImage(command.getImage());

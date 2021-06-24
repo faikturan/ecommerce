@@ -6,7 +6,6 @@ import org.ashina.ecommerce.payment.application.command.model.ProcessPaymentComm
 import org.ashina.ecommerce.payment.domain.Payment;
 import org.ashina.ecommerce.payment.infrastructure.persistence.repository.PaymentRepository;
 import org.ashina.ecommerce.sharedkernel.command.handler.CommandHandler;
-import org.ashina.ecommerce.sharedkernel.domain.DomainEntityIdentifierGenerator;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -45,7 +44,6 @@ public class ProcessPaymentCommandHandler implements CommandHandler<ProcessPayme
 
     private Payment newPayment(ProcessPaymentCommand command) {
         Payment payment = new Payment();
-        payment.setId(DomainEntityIdentifierGenerator.uuid());
         payment.setCustomerId(command.getCustomerId());
         payment.setOrderId(command.getOrderId());
         payment.setAmount(command.getAmount());
