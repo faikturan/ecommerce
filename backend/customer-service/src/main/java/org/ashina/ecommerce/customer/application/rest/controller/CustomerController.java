@@ -27,7 +27,8 @@ public class CustomerController {
 
     private CreateCustomerCommand newCreateCustomerCommand(CreateCustomerDto dto) {
         return CreateCustomerCommand.builder()
-                .fullName(dto.getFullName())
+                .lastName(dto.getLastName())
+                .firstName(dto.getFirstName())
                 .email(dto.getEmail())
                 .password(dto.getPassword())
                 .build();

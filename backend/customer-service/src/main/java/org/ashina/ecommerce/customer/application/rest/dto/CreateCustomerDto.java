@@ -12,8 +12,12 @@ import javax.validation.constraints.Size;
 public class CreateCustomerDto {
 
     @NotBlank
-    @Size(max = 100)
-    private String fullName;
+    @Size(max = 50)
+    private String lastName;
+
+    @NotBlank
+    @Size(max = 50)
+    private String firstName;
 
     @NotBlank
     @Email

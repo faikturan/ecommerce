@@ -117,20 +117,32 @@ public class FulfillmentOrderCommandHandler implements CommandHandler<Fulfillmen
         order.setId(DomainEntityIdentifierGenerator.uuid());
         order.setCustomerId(command.getCustomerId());
         cart.getLines().forEach(cartLine -> {
-            Order.Line orderLine = new Order.Line();
-            orderLine.setProductId(cartLine.getProductId());
-            orderLine.setProductName(cartLine.getProductName());
-            orderLine.setProductImage(cartLine.getProductImage());
-            orderLine.setProductPrice(cartLine.getProductPrice());
-            orderLine.setQuantity(cartLine.getQuantity());
+            Order.Line orderLine = newOrderLine(cartLine);
             order.addLine(orderLine);
         });
         order.setTotal(cart.getTotal());
-        order.setFullName(command.getFullName());
-        order.setPhoneNumber(command.getPhoneNumber());
-        order.setAddress(command.getAddress());
+        Order.Recipient recipient = newOrderRecipient(command);
+        order.setRecipient(recipient);
         order.setStatus(OrderStatus.CREATED);
         return order;
+    }
+
+    private Order.Line newOrderLine(GetCartDto.Line cartLine) {
+        Order.Line orderLine = new Order.Line();
+        orderLine.setProductId(cartLine.getProductId());
+        orderLine.setProductName(cartLine.getProductName());
+        orderLine.setProductImage(cartLine.getProductImage());
+        orderLine.setProductPrice(cartLine.getProductPrice());
+        orderLine.setQuantity(cartLine.getQuantity());
+        return orderLine;
+    }
+
+    private Order.Recipient newOrderRecipient(FulfillmentOrderCommand command) {
+        Order.Recipient recipient = new Order.Recipient();
+        recipient.setName(command.getName());
+        recipient.setPhoneNumber(command.getPhoneNumber());
+        recipient.setAddress(command.getAddress());
+        return recipient;
     }
 
     // Reserve products

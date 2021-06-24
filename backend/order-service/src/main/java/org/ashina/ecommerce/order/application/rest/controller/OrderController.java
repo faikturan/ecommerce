@@ -32,7 +32,7 @@ public class OrderController {
     private FulfillmentOrderCommand newFulfillmentOrderCommand(FulfillmentOrderDto dto, Jwt jwt) {
         return FulfillmentOrderCommand.builder()
                 .customerId(SecurityContextHelper.currentCustomerId(jwt))
-                .fullName(dto.getFullName())
+                .name(dto.getName())
                 .phoneNumber(dto.getPhoneNumber())
                 .address(dto.getAddress())
                 .build();

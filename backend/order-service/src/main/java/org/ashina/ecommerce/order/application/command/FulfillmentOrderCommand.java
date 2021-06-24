@@ -13,7 +13,7 @@ public class FulfillmentOrderCommand {
     private final String customerId;
 
     @NotBlank
-    private final String fullName;
+    private final String name;
 
     @NotBlank
     private final String phoneNumber;

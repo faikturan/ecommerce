@@ -26,12 +26,19 @@ public class Order extends BaseEntity {
         public static final int MAX_QUANTITY = 10;
     }
 
+    @Getter
+    @Setter
+    public static class Recipient {
+
+        private String name;
+        private String phoneNumber;
+        private String address;
+    }
+
     private String customerId;
     private List<Line> lines = new ArrayList<>();
     private Integer total;
-    private String fullName;
-    private String phoneNumber;
-    private String address;
+    private Recipient recipient;
     private OrderStatus status;
 
     public void addLine(Line line) {

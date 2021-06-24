@@ -28,6 +28,10 @@ public class KeycloakUaaService implements UaaService {
     private final Keycloak keycloak;
     private final KeycloakProperties keycloakProperties;
 
+    private static final String ATTRIBUTE_CUSTOMER_ID = "customerId";
+    private static final String ATTRIBUTE_LAST_NAME = "lastName";
+    private static final String ATTRIBUTE_FIRST_NAME = "firstName";
+
     @Override
     public void createAccount(Customer customer, String password) {
         RealmResource realmResource = keycloak.realm(keycloakProperties.getRealm());
@@ -81,8 +85,9 @@ public class KeycloakUaaService implements UaaService {
         UserRepresentation user = new UserRepresentation();
         user.setUsername(customer.getEmail());
         user.setEmail(customer.getEmail());
-        user.singleAttribute("customerId", customer.getId());
-        user.singleAttribute("fullName", customer.getFullName());
+        user.singleAttribute(ATTRIBUTE_CUSTOMER_ID, customer.getId());
+        user.singleAttribute(ATTRIBUTE_LAST_NAME, customer.getLastName());
+        user.singleAttribute(ATTRIBUTE_FIRST_NAME, customer.getFirstName());
         user.setCredentials(Collections.singletonList(credential));
         user.setEnabled(true);
         return user;

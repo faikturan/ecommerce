@@ -10,7 +10,9 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @Setter
 public class Customer extends BaseEntity {
 
-    private String fullName;
+    private String lastName;
+
+    private String firstName;
 
     private String email;
 }

@@ -12,8 +12,12 @@ import javax.validation.constraints.Size;
 public class CreateCustomerCommand {
 
     @NotBlank
-    @Size(max = 100)
-    private final String fullName;
+    @Size(max = 50)
+    private final String lastName;
+
+    @NotBlank
+    @Size(max = 50)
+    private final String firstName;
 
     @NotBlank
     @Email

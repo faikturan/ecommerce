@@ -10,7 +10,7 @@ import javax.validation.constraints.NotBlank;
 public class FulfillmentOrderDto {
 
     @NotBlank
-    private String fullName;
+    private String name;
 
     @NotBlank
     private String phoneNumber;
