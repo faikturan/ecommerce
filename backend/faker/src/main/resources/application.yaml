@@ -2,6 +2,10 @@ spring:
   autoconfigure:
     exclude: org.springframework.boot.autoconfigure.mongo.MongoAutoConfiguration
 
+logging:
+  level:
+    org.springframework.data.mongodb.core.MongoTemplate: DEBUG
+
 mongo:
-  customer: mongodb://localhost:27018/customer
-  product: mongodb://localhost:27018/product
+  customer: mongodb://localhost:27017/customer
+  product: mongodb://localhost:27017/product
