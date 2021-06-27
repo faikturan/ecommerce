@@ -1,16 +1,22 @@
 package org.ashina.ecommerce.faker;
 
+import org.ashina.ecommerce.faker.model.product.Product;
 import org.ashina.ecommerce.faker.repository.product.ProductRepository;
+import org.ashina.ecommerce.faker.service.CustomerFakerService;
 import org.ashina.ecommerce.faker.service.ProductFakerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
+import java.util.List;
 import java.util.Random;
 
 @SpringBootApplication
 public class FakerApplication implements CommandLineRunner {
+
+	@Autowired
+	private CustomerFakerService customerFakerService;
 
 	@Autowired
 	private ProductFakerService productFakerService;
@@ -26,10 +32,12 @@ public class FakerApplication implements CommandLineRunner {
 
 	@Override
 	public void run(String... args) throws Exception {
-//		productFakerService.fake(1000);
-		while (true) {
-			int randomNumber = random.nextInt(100 - 1 + 1) + 1;
-			productRepository.findByPriceBetween(randomNumber, randomNumber + 10);
-		}
+		customerFakerService.fake(1000000);
+//		productFakerService.fake(1000000);
+//		while (true) {
+//			int random = (int) (Math.random() * 100 + 1);
+//			List<Product> products = productRepository.findByPriceBetween(random, random + 30);
+//			Thread.sleep(100);
+//		}
 	}
 }

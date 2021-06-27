@@ -3,10 +3,10 @@ version: "3"
 services:
   
   mongo:
-    image: mongo:4.4
+    image: mongo:3.4
     container_name: mongo
     ports:
-      - "27018:27017"
+      - "27017:27017"
     volumes:
       - mongo-db:/data/db
       - mongo-configdb:/data/configdb

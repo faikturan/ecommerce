@@ -7,5 +7,5 @@ logging:
     org.springframework.data.mongodb.core.MongoTemplate: DEBUG
 
 mongo:
-  customer: mongodb://localhost:27017/customer
-  product: mongodb://localhost:27017/product
+  customer: mongodb://localhost:27017/ecommerce
+  product: mongodb://localhost:27017/ecommerce
