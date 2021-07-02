@@ -1,7 +1,6 @@
 package org.ashina.ecommerce.faker.service;
 
 import com.github.javafaker.Faker;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.ashina.ecommerce.faker.model.product.Product;
 import org.ashina.ecommerce.faker.repository.product.ProductRepository;
@@ -11,24 +10,29 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
-@RequiredArgsConstructor
 @Slf4j
 public class ProductFakerService implements FakerService {
 
-    private final Faker faker;
     private final ProductRepository productRepository;
+    private final Faker faker;
 
-    private static final int BATCH_SIZE = 100;
+    public ProductFakerService(ProductRepository productRepository) {
+        this.productRepository = productRepository;
+        this.faker = faker();
+    }
+
+    private Faker faker() {
+        return new Faker();
+    }
 
     @Override
-    public void fake(int count) {
+    public void fake() {
         List<Product> products = new ArrayList<>();
-        for (int i = 0; i < count; i++) {
-            Product product = fake();
+        for (int i = 0; i < 1000000; i++) {
+            Product product = create();
             products.add(product);
-            if (products.size() % BATCH_SIZE == 0) {
+            if (products.size() % 1000 == 0) {
                 productRepository.saveAll(products);
-                log.debug("Fake {} products done", BATCH_SIZE);
                 products.clear();
             }
         }
@@ -37,7 +41,7 @@ public class ProductFakerService implements FakerService {
         }
     }
 
-    private Product fake() {
+    private Product create() {
         Product product = new Product();
         product.setName(faker.commerce().productName());
         product.setImage(faker.internet().image());

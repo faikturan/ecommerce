@@ -18,13 +18,18 @@ public class MultipleMongoConfiguration {
 
     @Bean
     @Primary
+    public MongoDatabaseFactory customerMongoDbFactory(final String url) {
+        return new SimpleMongoClientDatabaseFactory(url);
+    }
+
+    @Bean
+    @Primary
     public MongoTemplate customerMongoTemplate() {
         return new MongoTemplate(customerMongoDbFactory(properties.getCustomer()));
     }
 
     @Bean
-    @Primary
-    public MongoDatabaseFactory customerMongoDbFactory(final String url) {
+    public MongoDatabaseFactory productMongoDbFactory(final String url) {
         return new SimpleMongoClientDatabaseFactory(url);
     }
 
@@ -34,7 +39,12 @@ public class MultipleMongoConfiguration {
     }
 
     @Bean
-    public MongoDatabaseFactory productMongoDbFactory(final String url) {
+    public MongoDatabaseFactory orderMongoDbFactory(final String url) {
         return new SimpleMongoClientDatabaseFactory(url);
+    }
+
+    @Bean
+    public MongoTemplate orderMongoTemplate() {
+        return new MongoTemplate(orderMongoDbFactory(properties.getOrder()));
     }
 }

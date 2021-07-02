@@ -1,10 +1,8 @@
 package org.ashina.ecommerce.faker.service;
 
 import com.github.javafaker.Faker;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.ashina.ecommerce.faker.model.customer.Customer;
-import org.ashina.ecommerce.faker.repository.customer.CustomerRepository;
 import org.ashina.ecommerce.faker.repository.customer.CustomerRepository;
 import org.springframework.stereotype.Service;
 
@@ -12,24 +10,29 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
-@RequiredArgsConstructor
 @Slf4j
 public class CustomerFakerService implements FakerService {
 
-    private final Faker faker;
     private final CustomerRepository customerRepository;
+    private final Faker faker;
 
-    private static final int BATCH_SIZE = 100;
+    public CustomerFakerService(CustomerRepository customerRepository) {
+        this.customerRepository = customerRepository;
+        this.faker = faker();
+    }
+
+    private Faker faker() {
+        return new Faker();
+    }
 
     @Override
-    public void fake(int count) {
+    public void fake() {
         List<Customer> customers = new ArrayList<>();
-        for (int i = 0; i < count; i++) {
-            Customer customer = fakeCustomer(i + 1);
+        for (int i = 0; i < 1000000; i++) {
+            Customer customer = create();
             customers.add(customer);
-            if (customers.size() % BATCH_SIZE == 0) {
+            if (customers.size() % 1000 == 0) {
                 customerRepository.saveAll(customers);
-                log.debug("Fake {} customers done", BATCH_SIZE);
                 customers.clear();
             }
         }
@@ -38,12 +41,7 @@ public class CustomerFakerService implements FakerService {
         }
     }
 
-    private Customer fakeCustomer(int i) {
-        Customer customer = new Customer();
-        customer.setLastName(faker.name().lastName());
-        customer.setFirstName(faker.name().firstName());
-        customer.setEmail(String.format("%s.%s+%d@gmail.com",
-                customer.getLastName().toLowerCase(), customer.getFirstName().toLowerCase(), i));
-        return customer;
+    protected Customer create() {
+        return null;
     }
 }

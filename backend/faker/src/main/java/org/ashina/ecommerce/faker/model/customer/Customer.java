@@ -4,6 +4,8 @@ import lombok.Getter;
 import lombok.Setter;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import java.util.Date;
+
 @Document(collection = "customers")
 @Getter
 @Setter
@@ -13,5 +15,9 @@ public class Customer extends BaseEntity {
 
     private String firstName;
 
-    private String email;
+    private Gender gender;
+
+    private Date dateOfBirth;
+
+    private int orders;
 }

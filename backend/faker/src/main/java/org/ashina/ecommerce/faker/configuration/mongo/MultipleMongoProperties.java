@@ -9,4 +9,5 @@ public class MultipleMongoProperties {
 
     private String customer;
     private String product;
+    private String order;
 }
